@@ -4,7 +4,6 @@ package com.otter_in_a_suit.MC.ChunkAnalyzerMod.Blocks;
  * TODO: One Block torch
  * TODO: save tile
  * TODO: CFG
- * TODO: Searchable in tile
  * TODO: Chunk analyzer
  */
 import java.util.ArrayList;
@@ -45,8 +44,7 @@ public abstract class BaseScanner extends BlockContainer implements IScanner {
 		this.setHardness(3F)
 				.setResistance(5F)
 				.setBlockName("BaseScanner")
-				.setBlockTextureName(
-						"com.otter_in_a_suit.MC.ScannerMod:StoneScanner")
+				.setBlockTextureName("chunkanalyzermod:IronScanner")
 				.setCreativeTab(CreativeInv._instance);
 	}
 	

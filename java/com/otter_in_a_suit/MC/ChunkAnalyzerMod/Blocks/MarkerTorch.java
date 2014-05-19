@@ -2,22 +2,26 @@ package com.otter_in_a_suit.MC.ChunkAnalyzerMod.Blocks;
 
 import java.util.Random;
 
-import com.otter_in_a_suit.MC.ChunkAnalyzerMod.CreativeInv;
-import com.otter_in_a_suit.MC.ChunkAnalyzerMod.ChunkAnalyzerMod;
-
-import net.minecraft.block.BlockRedstoneTorch;
+import net.minecraft.block.BlockTorch;
 import net.minecraft.item.Item;
+import net.minecraft.world.World;
 
-public class MarkerTorch extends BlockRedstoneTorch{
+import com.otter_in_a_suit.MC.ChunkAnalyzerMod.ChunkAnalyzerMod;
+import com.otter_in_a_suit.MC.ChunkAnalyzerMod.CreativeInv;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+public class MarkerTorch extends BlockTorch{
 
 	public MarkerTorch(){
-		super(false);
+		super();
 		this.setBlockName("Marker torch");
 		this.setCreativeTab(CreativeInv._instance);
 		this.setHardness(0.0F);
 		this.setLightLevel(0.9375f/2);
 		this.setStepSound(soundTypeWood);
-		this.setBlockTextureName("torch_on");
+		this.setBlockTextureName("redstone_torch_off");
 	}
 	
 	@Override
@@ -25,4 +29,18 @@ public class MarkerTorch extends BlockRedstoneTorch{
     {
         return Item.getItemFromBlock(ChunkAnalyzerMod.markerTorch);
     }
+    
+	@Override
+    @SideOnly(Side.CLIENT)
+    public Item getItem(World p_149694_1_, int p_149694_2_, int p_149694_3_, int p_149694_4_)
+    {
+        return Item.getItemFromBlock(ChunkAnalyzerMod.markerTorch);
+    }
+	
+	@Override
+    public boolean renderAsNormalBlock()
+    {
+        return true;
+    }
+
 }
