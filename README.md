@@ -3,7 +3,6 @@ Chunk Analyzer Mod Minecraft 1.7.2
 
 Content
 -----------
-Desc
 * Scanner 
 
 Disclaimer

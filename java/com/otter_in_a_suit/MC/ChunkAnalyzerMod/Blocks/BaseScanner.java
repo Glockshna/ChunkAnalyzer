@@ -13,6 +13,7 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -32,6 +33,9 @@ import com.otter_in_a_suit.MC.ChunkAnalyzerMod.Items.IronCage;
 
 public abstract class BaseScanner extends BlockContainer implements IScanner {
 
+	/*************************
+	 * VARIABLES & CONSTRUCTORS
+	 ************************/
 	protected int quantityDropped = 0;
 	private int explosion_threshold = 50;
 	private static Randomizer _randomizer = new Randomizer();
@@ -45,7 +49,10 @@ public abstract class BaseScanner extends BlockContainer implements IScanner {
 						"com.otter_in_a_suit.MC.ScannerMod:StoneScanner")
 				.setCreativeTab(CreativeInv._instance);
 	}
-
+	
+	/************************
+	 * MAIN FUNCTIONS
+	 ************************/
 	/*
 	 * on right click (non-Javadoc)
 	 * 
@@ -65,8 +72,6 @@ public abstract class BaseScanner extends BlockContainer implements IScanner {
 		int y = p_149727_3_;
 		int z = p_149727_4_;
 
-		// TODO: implement set
-		
 		// Set searchFor-block
 		Block searchFor = Blocks.diamond_ore;
 		try {
@@ -134,12 +139,15 @@ public abstract class BaseScanner extends BlockContainer implements IScanner {
 		}
 		long size = 0;
 		int count = 0;
+		int accountableCount = 0;
+		boolean kBlocked = true;
 		ArrayList<Vertex> findings = new ArrayList<Vertex>();
 		Chunk chunk = p_149727_1_.getChunkFromBlockCoords(x, z);
 		int chunkX = chunk.xPosition * 16;
 		int chunkZ = chunk.zPosition * 16;
 		for (int i = 0; i < 16; ++i) {
 			for (int j = 0; j < 16; ++j) {
+				kBlocked = false;
 				for (int k = 0; k < 256; ++k) {
 					Block block = p_149727_1_.getBlock(chunkX + i, k, chunkZ
 							+ j);
@@ -149,11 +157,15 @@ public abstract class BaseScanner extends BlockContainer implements IScanner {
 					if (block == searchFor) {
 						findings.add(new Vertex(chunkX + i, k, chunkZ + j));					
 						count++;
+						if(!kBlocked) {
+							accountableCount++; // we only need the figure for blocks that aren't stacked in the y-axis
+							kBlocked = true;
+						}
 					}
 				}
 			}
 		}
-
+		System.out.println("accountableCount "+accountableCount);
 		// distinguish the tier
 		// check if the player has sufficient torches
 		// the branching is a nightmare, but i plan on changing this in the
@@ -191,10 +203,15 @@ public abstract class BaseScanner extends BlockContainer implements IScanner {
 					Vertex v = findings.get(cc);
 					//ySky = WorldHelper.getGroundLevelYAxsis(p_149727_1_, v.z, y, v.z); // TODO getGroundLevelYAxsis
 					if(p_149727_1_.isAirBlock(v.x, ySky-1, v.z)) p_149727_1_.setBlock(v.x, ySky-1, v.z, Blocks.cobblestone);
-					p_149727_1_.setBlock(v.x, ySky, v.z, ChunkAnalyzerMod.markerTorch);
-					System.out.println("Torch at "+v.x+", "+ySky+", "+ v.z);
-					if (!player.capabilities.isCreativeMode)
-						player.inventory.consumeInventoryItem(marker);
+					
+					if(p_149727_1_.getBlock(v.x, ySky, v.z) != ChunkAnalyzerMod.markerTorch) {
+						p_149727_1_.setBlock(v.x, ySky, v.z, ChunkAnalyzerMod.markerTorch);
+						System.out.println("Torch at "+v.x+", "+ySky+", "+ v.z);
+						
+						if (!player.capabilities.isCreativeMode)
+							player.inventory.consumeInventoryItem(marker);
+					}
+					
 				}
 			} else if (renderOne && markerTorchCount >= 1) {
 				System.out.println("XXX "+markerTorchCount);
@@ -209,7 +226,7 @@ public abstract class BaseScanner extends BlockContainer implements IScanner {
 			
 			if (markerTorchCount <= 0) {
 				msg = msg.replace("!", ", but you have no marker torches!");
-			} else if (markerTorchCount < count) {
+			} else if (markerTorchCount < accountableCount) {
 				msg = msg.replace("!",
 						", but you haven't sufficient marker torches!");
 			}
@@ -220,7 +237,6 @@ public abstract class BaseScanner extends BlockContainer implements IScanner {
 		
 
 		// TODO: transparent marker
-		// TODO: make block to search for chooseable
 		WorldHelper.chat(msg);
 
 		System.out.println("SIZE: " + size);
@@ -254,6 +270,7 @@ public abstract class BaseScanner extends BlockContainer implements IScanner {
 		getAndSaveExplosionThreshold(world, x, y, z);
 		int isExplode = _randomizer
 				.calculateExplosionLevel(explosion_threshold);
+		
 		if (isExplode == Randomizer.LEVEL_EXPL_DES) {
 			triggerExplosion(world, x, y, z);
 		} else if (isExplode == Randomizer.LEVEL_EXPL_PRES
@@ -278,18 +295,47 @@ public abstract class BaseScanner extends BlockContainer implements IScanner {
 		return world.setBlockToAir(x, y, z);
 	}
 
-	private void triggerExplosion(World world, int x, int y, int z) {
-		float strength = 2.0f; // 4.0 = TNT
-		world.createExplosion(null, x, y, z, strength, true);
+	/************************
+	 * OVERRIDEN FROM SUPER W/O MAJOR ADJUSTMENTS
+	 ************************/
+	@Override
+    public void breakBlock(World p_149749_1_, int p_149749_2_, int p_149749_3_, int p_149749_4_, Block p_149749_5_, int p_149749_6_)
+    {
+        super.breakBlock(p_149749_1_, p_149749_2_, p_149749_3_, p_149749_4_, p_149749_5_, p_149749_6_);
+        //p_149749_1_.removeTileEntity(p_149749_2_, p_149749_3_, p_149749_4_);
+    }
+	
+	@Override
+	protected void dropBlockAsItem(World p_149642_1_, int p_149642_2_, int p_149642_3_, int p_149642_4_, ItemStack p_149642_5_){
+		try {
+			//TileEntity tile = TileEntityHelper.getTileEntityBaseScannerFromCoords(p_149642_1_, p_149642_2_, p_149642_3_, p_149642_4_);
+			//p_149642_5_.setTagCompound()); // TODO: do...something useful
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		super.dropBlockAsItem(p_149642_1_, p_149642_2_, p_149642_3_, p_149642_4_, p_149642_5_);
+	}
+	
+	@Override
+	public void onBlockPlacedBy(World p_149689_1_, int p_149689_2_, int p_149689_3_, int p_149689_4_, EntityLivingBase p_149689_5_, ItemStack p_149689_6_) {
+		
 	}
 
 	@Override
 	public int quantityDropped(Random p_149745_1_) {
 		return quantityDropped;
 	}
-
+	
+	/************************
+	 * EASE OF USE / NON-EXTERNALIZED HELPER
+	 ************************/
 	public TileEntity createNewTileEntity(World var1, int var2) {
 		return new TileEntityBaseScanner();
+	}
+	
+	public boolean hasTileEntity(int metadata)
+	{
+	    return true;
 	}
 
 	private int getAndSaveExplosionThreshold(World world, int x, int y, int z) {
@@ -306,5 +352,10 @@ public abstract class BaseScanner extends BlockContainer implements IScanner {
 
 	public int getLevel() {
 		return LEVEL_BASE;
+	}
+	
+	private void triggerExplosion(World world, int x, int y, int z) {
+		float strength = 2.0f; // 4.0 = TNT
+		world.createExplosion(null, x, y, z, strength, true);
 	}
 }
