@@ -1,0 +1,16 @@
+[
+{
+  "modid": "chunkanalyzermod",
+  "name": "Chunk Analyzer Mod",
+  "description": "Example placeholder mod.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["otter-in-a-suit"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
