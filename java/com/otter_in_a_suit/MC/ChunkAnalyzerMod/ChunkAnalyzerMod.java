@@ -18,7 +18,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 @Mod(modid = ChunkAnalyzerMod.MODID, version = ChunkAnalyzerMod.VERSION)
 public class ChunkAnalyzerMod {
   public static final String MODID = "chunkanalyzermod";
-  public static final String VERSION = "0.1";
+  public static final String VERSION = "0.2b";
 
   public static StoneScanner stoneScanner;
   public static IronScanner ironScanner;
@@ -60,17 +60,26 @@ public class ChunkAnalyzerMod {
   }
 
   private void registerRecepies() {
-    GameRegistry.addRecipe(new ItemStack(stoneScanner), "SIS", "IRI", "SIS",
+    GameRegistry.addRecipe(new ItemStack(stoneScanner), 
+        "SIS", 
+        "IRI", 
+        "SIS",
         //
         'S', new ItemStack(Blocks.stone_slab), 'I', new ItemStack(Items.iron_pickaxe), 'R',
         new ItemStack(Items.redstone));
 
-    GameRegistry.addRecipe(new ItemStack(ironScanner), "SIS", "IRI", "SIS",
+    GameRegistry.addRecipe(new ItemStack(ironScanner), 
+        "SIS", 
+        "IRI", 
+        "SIS",
         //
         'S', new ItemStack(Blocks.iron_bars), 'I', new ItemStack(Items.iron_pickaxe), 'R',
         new ItemStack(stoneScanner));
 
-    GameRegistry.addRecipe(new ItemStack(goldScanner), "SIS", "IRI", "SIS",
+    GameRegistry.addRecipe(new ItemStack(goldScanner), 
+        "SIS", 
+        "IRI", 
+        "SIS",
         //
         'S', new ItemStack(Items.gold_ingot), 'I', new ItemStack(Items.golden_pickaxe), 'R',
         new ItemStack(ironScanner));
@@ -78,9 +87,5 @@ public class ChunkAnalyzerMod {
     GameRegistry.addRecipe(new ItemStack(ironCage), "III", "I I", "III",
     //
         'I', new ItemStack(Blocks.iron_bars, 2));
-
-    GameRegistry.addRecipe(new ItemStack(markerTorch, 2), "T  ", "T  ", "   ",
-    //
-        'T', new ItemStack(Blocks.torch));
   }
 }

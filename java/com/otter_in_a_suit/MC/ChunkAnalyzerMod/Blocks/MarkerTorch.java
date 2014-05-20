@@ -2,7 +2,7 @@ package com.otter_in_a_suit.MC.ChunkAnalyzerMod.Blocks;
 
 import java.util.Random;
 
-import net.minecraft.block.BlockTorch;
+import net.minecraft.block.BlockSkull;
 import net.minecraft.item.Item;
 import net.minecraft.world.World;
 
@@ -12,7 +12,7 @@ import com.otter_in_a_suit.MC.ChunkAnalyzerMod.CreativeInv;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 // BlockSkull
-public class MarkerTorch extends BlockTorch {
+public class MarkerTorch extends BlockSkull {
 
   public MarkerTorch() {
     super();
@@ -20,8 +20,8 @@ public class MarkerTorch extends BlockTorch {
     this.setCreativeTab(CreativeInv._instance);
     this.setHardness(0.0F);
     this.setLightLevel(0.9375f / 2);
-    this.setStepSound(soundTypeWood);
-    this.setBlockTextureName("redstone_torch_off");
+    this.setStepSound(soundTypeCloth);
+    this.setBlockTextureName("chunkanalyzermod:Marker");
   }
 
   @Override
@@ -38,6 +38,11 @@ public class MarkerTorch extends BlockTorch {
   @Override
   public boolean renderAsNormalBlock() {
     return true;
+  }
+  
+  public int quantityDropped(Random p_149745_1_)
+  {
+      return 0;
   }
 
 }

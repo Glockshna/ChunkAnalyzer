@@ -89,7 +89,7 @@ public abstract class BaseScanner extends BlockContainer implements IScanner {
       WorldHelper.chat("Couldn't read or store a (stored) block, l/f diamond-ore instead!");
     }
 
-    search(p_149727_1_, p_149727_5_, x, y, z, searchFor, this, true);
+    search(p_149727_1_, p_149727_5_, x, y, z, searchFor, this, true, false);
 
     return false;
   }
@@ -97,7 +97,11 @@ public abstract class BaseScanner extends BlockContainer implements IScanner {
 
   protected ArrayList<Vertex> scan(World p_149727_1_, EntityPlayer player, int x, int y, int z,
       BaseScanner caller) {
-    return this.search(p_149727_1_, player, x, y, z, null, caller, false);
+    return this.search(p_149727_1_, player, x, y, z, null, caller, false, false);
+  }
+
+  protected void resetChunkFromMarkers(World p_149727_1_, int x, int y, int z) {
+    this.search(p_149727_1_, null, x, y, z, null, this, false, true);
   }
 
   /**
@@ -107,12 +111,14 @@ public abstract class BaseScanner extends BlockContainer implements IScanner {
    * @param x
    * @param y
    * @param z
-   * @param searchFor: If null, scan only / called by scan()
+   * @param searchFor
    * @param caller
-   * @param placeMarkers: Used to place torches
+   * @param placeMarkers
+   * @param resetOnly: use resetChunkFromMarkers()
+   * @return
    */
   protected ArrayList<Vertex> search(World p_149727_1_, EntityPlayer player, int x, int y, int z,
-      Block searchFor, BaseScanner caller, boolean placeMarkers) {
+      Block searchFor, BaseScanner caller, boolean placeMarkers, boolean resetOnly) {
     boolean debugPlacer = false;
     if (searchFor == null || caller instanceof ChunkAnalyzer)
       placeMarkers = false;
@@ -164,22 +170,25 @@ public abstract class BaseScanner extends BlockContainer implements IScanner {
           if (block != Blocks.air) {
             ++size;
           }
-          if (block == ChunkAnalyzerMod.markerTorch){
+          if (block == ChunkAnalyzerMod.markerTorch) {
             p_149727_1_.setBlockToAir(chunkX + i, k, chunkZ + j);
           }
-          // just analyze
-          if (searchFor == null) {
-            findings.add(new Vertex(chunkX + i, k, chunkZ + j, block));
-          } else if (block == searchFor) {
-            findings.add(new Vertex(chunkX + i, k, chunkZ + j, block));
-            count++;
-            if (!kBlocked) {
-              accountableCount++; // we only need the figure for
-              // blocks that aren't stacked in
-              // the y-axis
-              kBlocked = true;
+          if (!resetOnly) {
+            // just analyze
+            if (searchFor == null) {
+              findings.add(new Vertex(chunkX + i, k, chunkZ + j, block));
+            } else if (block == searchFor) {
+              findings.add(new Vertex(chunkX + i, k, chunkZ + j, block));
+              count++;
+              if (!kBlocked) {
+                accountableCount++; // we only need the figure for
+                // blocks that aren't stacked in
+                // the y-axis
+                kBlocked = true;
+              }
             }
           }
+
         }
       }
     }
@@ -201,10 +210,16 @@ public abstract class BaseScanner extends BlockContainer implements IScanner {
     // the branching is a nightmare, but i plan on changing this in the
     // future
     // (2014-05-19)
+
+    // enable player needs torches
+    boolean playerNeedsTorches = false;
+
     String msg = "";
     boolean renderTorches = false, renderOne = false;
     Item marker = Item.getItemFromBlock(ChunkAnalyzerMod.markerTorch);
-    int markerTorchCount = PlayerHelper.InventoryContainsItem_i(player, marker);
+    int markerTorchCount =
+        (playerNeedsTorches) ? PlayerHelper.InventoryContainsItem_i(player, marker) : findings
+            .size() + 1;
 
     if (!findings.isEmpty()) {
       if (caller.getLevel() == LEVEL_BASE) {
@@ -223,24 +238,23 @@ public abstract class BaseScanner extends BlockContainer implements IScanner {
       // Render
       int ySky = y;
       if (renderTorches) {
-        System.out.println("Findings: " + findings.size());
-        System.out.println("Torches: " + markerTorchCount);
         for (int cc = 0; cc < markerTorchCount && cc < findings.size(); cc++) {
           Vertex v = findings.get(cc);
-       // TODO getGroundLevelYAxsis
-          ySky = WorldHelper.getGroundLevelYAxsis_i(p_149727_1_, v.z, y, v.z); 
-          if (p_149727_1_.isAirBlock(v.x, ySky - 1, v.z)){
+          // TODO getGroundLevelYAxsis
+          ySky = WorldHelper.getGroundLevelYAxsis_i(p_149727_1_, v.z, y, v.z);
+          if (p_149727_1_.isAirBlock(v.x, ySky - 1, v.z)) {
             p_149727_1_.setBlock(v.x, ySky - 1, v.z, Blocks.cobblestone);
           }
-            
-          
+
+
           // dont replace the scanner by a torch
           if (p_149727_1_.getBlock(v.x, ySky, v.z) != ChunkAnalyzerMod.markerTorch) {
-            p_149727_1_.spawnEntityInWorld(new EntityItem(p_149727_1_, x, y, z, new ItemStack(p_149727_1_.getBlock(v.x, ySky, v.z))));
+            p_149727_1_.spawnEntityInWorld(new EntityItem(p_149727_1_, x, y, z, new ItemStack(
+                p_149727_1_.getBlock(v.x, ySky, v.z))));
             p_149727_1_.setBlock(v.x, ySky, v.z, ChunkAnalyzerMod.markerTorch);
             System.out.println("Torch at " + v.x + ", " + ySky + ", " + v.z);
 
-            if (!player.capabilities.isCreativeMode)
+            if (!player.capabilities.isCreativeMode && playerNeedsTorches)
               player.inventory.consumeInventoryItem(marker);
           }
 
@@ -253,7 +267,7 @@ public abstract class BaseScanner extends BlockContainer implements IScanner {
           p_149727_1_.setBlock(v.x, ySky - 1, v.z, Blocks.cobblestone);
         p_149727_1_.setBlock(v.x, ySky, v.z, ChunkAnalyzerMod.markerTorch);
         System.out.println("Torch at " + v.x + ", " + ySky + ", " + v.z);
-        if (!player.capabilities.isCreativeMode)
+        if (!player.capabilities.isCreativeMode && playerNeedsTorches)
           player.inventory.consumeInventoryItem(marker);
       }
 
@@ -300,23 +314,13 @@ public abstract class BaseScanner extends BlockContainer implements IScanner {
 
     if (isExplode == Randomizer.LEVEL_EXPL_DES) {
       triggerExplosion(world, x, y, z);
-    } else if (isExplode == Randomizer.LEVEL_EXPL_PRES && !player.capabilities.isCreativeMode) {
+    } else if (isExplode == Randomizer.LEVEL_EXPL_PRES) {
       this.dropBlockAsItem(world, x, y, z);
-      // player.inventory.addItemStackToInventory(new ItemStack(this, 1));
-      if (explosion_threshold > 50) {
-        // player.inventory.addItemStackToInventory(new ItemStack(new IronCage(), 1));
-      }
     } else {
       System.out.println("no boom =(");
-      if (!player.capabilities.isCreativeMode) {
-        // player.inventory.addItemStackToInventory(new ItemStack(this, 1));
-        this.dropBlockAsItem(world, x, y, z);
-        if (explosion_threshold > 50) {
-          // player.inventory.addItemStackToInventory(new ItemStack(new IronCage(), 1));
-        }
-      }
+      this.dropBlockAsItem(world, x, y, z);
     }
-
+    resetChunkFromMarkers(world, x, y, z);
     return world.setBlockToAir(x, y, z);
   }
 
@@ -339,16 +343,20 @@ public abstract class BaseScanner extends BlockContainer implements IScanner {
       int p_149642_4_, ItemStack p_149642_5_) {
     try {
       TileEntityBaseScanner tile =
-          TileEntityHelper.getTileEntityBaseScannerFromCoords(p_149642_1_, p_149642_2_, p_149642_3_, p_149642_4_);
-      String display = "Explosion-threshold: "+tile.getNBTTagCompound().getInteger("explosionThreshold");
-      display +=  "/ Searching for: "+Block.getBlockById(tile.getNBTTagCompound().getInteger("searchFor_ID"));
-      WorldHelper.dropBlockAsItemWithTileEntity(p_149642_1_, p_149642_2_, p_149642_3_,
-          p_149642_4_, this,display);
+          TileEntityHelper.getTileEntityBaseScannerFromCoords(p_149642_1_, p_149642_2_,
+              p_149642_3_, p_149642_4_);
+      String display =
+          "Explosion-threshold: " + tile.getNBTTagCompound().getInteger("explosionThreshold");
+      display +=
+          "/ Searching for: "
+              + Block.getBlockById(tile.getNBTTagCompound().getInteger("searchFor_ID"));
+      WorldHelper.dropBlockAsItemWithTileEntity(p_149642_1_, p_149642_2_, p_149642_3_, p_149642_4_,
+          this, display);
     } catch (Exception e) {
       e.printStackTrace();
-      
-     // WorldHelper.dropBlockAsItemWithTileEntity(p_149642_1_, p_149642_2_, p_149642_3_,
-     //     p_149642_4_, p_149642_5_.getItem());
+
+      // WorldHelper.dropBlockAsItemWithTileEntity(p_149642_1_, p_149642_2_, p_149642_3_,
+      // p_149642_4_, p_149642_5_.getItem());
     }
   }
 
@@ -360,14 +368,13 @@ public abstract class BaseScanner extends BlockContainer implements IScanner {
 
     try {
       NBTTagCompound nbt = p_149689_6_.getTagCompound();
-      if(nbt != null){
+      if (nbt != null) {
         TileEntityBaseScanner tile = new TileEntityBaseScanner();
-        //tile.writeToNBT(nbt);
+        // tile.writeToNBT(nbt);
         tile.writeToParByNBT(nbt);
         System.out.println(tile.explosionThreshold);
         p_149689_1_.setTileEntity(p_149689_2_, p_149689_3_, p_149689_4_, tile);
-      }
-      else {
+      } else {
         System.out.println("No NBT");
       }
     } catch (Exception e) {
