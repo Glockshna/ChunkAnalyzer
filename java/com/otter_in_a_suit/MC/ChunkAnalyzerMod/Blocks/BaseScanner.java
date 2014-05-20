@@ -1,7 +1,7 @@
 package com.otter_in_a_suit.MC.ChunkAnalyzerMod.Blocks;
 
 /**
- * TODO: save tile TODO: CFG TODO: Chunk analyzer
+ * TODO: CFG TODO: Chunk analyzer
  */
 import java.util.ArrayList;
 import java.util.Random;
@@ -164,6 +164,10 @@ public abstract class BaseScanner extends BlockContainer implements IScanner {
           if (block != Blocks.air) {
             ++size;
           }
+          if (block == ChunkAnalyzerMod.markerTorch){
+            p_149727_1_.setBlockToAir(chunkX + i, k, chunkZ + j);
+          }
+          // just analyze
           if (searchFor == null) {
             findings.add(new Vertex(chunkX + i, k, chunkZ + j, block));
           } else if (block == searchFor) {
@@ -223,8 +227,8 @@ public abstract class BaseScanner extends BlockContainer implements IScanner {
         System.out.println("Torches: " + markerTorchCount);
         for (int cc = 0; cc < markerTorchCount && cc < findings.size(); cc++) {
           Vertex v = findings.get(cc);
-          ySky = WorldHelper.getGroundLevelYAxsis_i(p_149727_1_, v.z, y, v.z); // TODO:
-                                                                               // getGroundLevelYAxsis
+       // TODO getGroundLevelYAxsis
+          ySky = WorldHelper.getGroundLevelYAxsis_i(p_149727_1_, v.z, y, v.z); 
           if (p_149727_1_.isAirBlock(v.x, ySky - 1, v.z)){
             p_149727_1_.setBlock(v.x, ySky - 1, v.z, Blocks.cobblestone);
           }
@@ -339,12 +343,12 @@ public abstract class BaseScanner extends BlockContainer implements IScanner {
       String display = "Explosion-threshold: "+tile.getNBTTagCompound().getInteger("explosionThreshold");
       display +=  "/ Searching for: "+Block.getBlockById(tile.getNBTTagCompound().getInteger("searchFor_ID"));
       WorldHelper.dropBlockAsItemWithTileEntity(p_149642_1_, p_149642_2_, p_149642_3_,
-          p_149642_4_, p_149642_5_.getItem(),display);
+          p_149642_4_, this,display);
     } catch (Exception e) {
       e.printStackTrace();
       
-      WorldHelper.dropBlockAsItemWithTileEntity(p_149642_1_, p_149642_2_, p_149642_3_,
-          p_149642_4_, p_149642_5_.getItem());
+     // WorldHelper.dropBlockAsItemWithTileEntity(p_149642_1_, p_149642_2_, p_149642_3_,
+     //     p_149642_4_, p_149642_5_.getItem());
     }
   }
 

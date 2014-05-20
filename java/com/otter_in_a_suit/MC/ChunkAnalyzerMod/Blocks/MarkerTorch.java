@@ -11,7 +11,7 @@ import com.otter_in_a_suit.MC.ChunkAnalyzerMod.CreativeInv;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
+// BlockSkull
 public class MarkerTorch extends BlockTorch {
 
   public MarkerTorch() {

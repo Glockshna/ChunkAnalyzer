@@ -2,11 +2,11 @@ package com.otter_in_a_suit.MC.ChunkAnalyzerMod.Helper;
 
 import com.otter_in_a_suit.MC.ChunkAnalyzerMod.Blocks.TileEntityBaseScanner;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.World;
@@ -70,7 +70,7 @@ public class WorldHelper {
    * @return
    */
   public static boolean dropBlockAsItemWithTileEntity(World world, int x, int y, int z,
-      Item parItem, String displayName) {
+      Block parItem, String displayName) {
     System.out.println("dropBlockAsItem");
 
     // super.dropBlockAsItem(p_149642_1_, p_149642_2_, p_149642_3_, p_149642_4_, p_149642_5_);
@@ -92,7 +92,7 @@ public class WorldHelper {
     }
   }
 
-  public static boolean dropBlockAsItemWithTileEntity(World world, int x, int y, int z, Item parItem) {
+  public static boolean dropBlockAsItemWithTileEntity(World world, int x, int y, int z, Block parItem) {
     return dropBlockAsItemWithTileEntity(world, x, y, z, parItem, null);
   }
 }

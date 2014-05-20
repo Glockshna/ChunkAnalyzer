@@ -36,7 +36,7 @@ public class ChunkAnalyzer extends BaseScanner implements IScanner {
     if(result != null && result.size() > 0){
       // TODO: implement TODO: use exp or similar
       for(Vertex v : result){
-        
+        System.out.println(v.y);
       }
     }
   }
