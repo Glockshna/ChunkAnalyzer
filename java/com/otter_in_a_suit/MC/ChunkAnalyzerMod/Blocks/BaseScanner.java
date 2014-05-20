@@ -12,7 +12,9 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -199,7 +201,7 @@ public abstract class BaseScanner extends BlockContainer implements IScanner {
 				System.out.println("Torches: "+markerTorchCount);
 				for (int cc = 0; cc < markerTorchCount && cc < findings.size(); cc++) {
 					Vertex v = findings.get(cc);
-					//ySky = WorldHelper.getGroundLevelYAxsis(p_149727_1_, v.z, y, v.z); // TODO getGroundLevelYAxsis
+					ySky = WorldHelper.getGroundLevelYAxsis_i(p_149727_1_, v.z, y, v.z); // TODO getGroundLevelYAxsis
 					if(p_149727_1_.isAirBlock(v.x, ySky-1, v.z)) p_149727_1_.setBlock(v.x, ySky-1, v.z, Blocks.cobblestone);
 					
 					if(p_149727_1_.getBlock(v.x, ySky, v.z) != ChunkAnalyzerMod.markerTorch) {
@@ -214,7 +216,7 @@ public abstract class BaseScanner extends BlockContainer implements IScanner {
 			} else if (renderOne && markerTorchCount >= 1) {
 				System.out.println("XXX "+markerTorchCount);
 				Vertex v = findings.get(0);
-				//ySky = WorldHelper.getGroundLevelYAxsis(p_149727_1_, v.z, y, v.z);
+				ySky = WorldHelper.getGroundLevelYAxsis_i(p_149727_1_, v.z, y, v.z);
 				if(p_149727_1_.isAirBlock(v.x, ySky-1, v.z)) p_149727_1_.setBlock(v.x, ySky-1, v.z, Blocks.cobblestone);
 				p_149727_1_.setBlock(v.x, ySky, v.z, ChunkAnalyzerMod.markerTorch);
 				System.out.println("Torch at "+v.x+", "+ySky+", "+ v.z);
@@ -297,20 +299,24 @@ public abstract class BaseScanner extends BlockContainer implements IScanner {
 	 * OVERRIDEN FROM SUPER W/O MAJOR ADJUSTMENTS
 	 ************************/
 	@Override
-    public void breakBlock(World p_149749_1_, int p_149749_2_, int p_149749_3_, int p_149749_4_, Block p_149749_5_, int p_149749_6_)
-    {
-        super.breakBlock(p_149749_1_, p_149749_2_, p_149749_3_, p_149749_4_, p_149749_5_, p_149749_6_);
+    public void breakBlock(World p_149749_1_, int p_149749_2_, int p_149749_3_, int p_149749_4_, Block p_149749_5_, int p_149749_6_){   	
+        //super.breakBlock(p_149749_1_, p_149749_2_, p_149749_3_, p_149749_4_, p_149749_5_, p_149749_6_);
         //p_149749_1_.removeTileEntity(p_149749_2_, p_149749_3_, p_149749_4_);
+		// TODO: TEST
+		try {
+			TileEntityBaseScanner tile = (TileEntityBaseScanner) TileEntityHelper.getTileEntityBaseScannerFromCoords(p_149749_1_, p_149749_2_, p_149749_3_, p_149749_4_);
+			ItemStack itemstack = new ItemStack(this,1);
+			itemstack.setTagCompound(tile.getNBTTagCompound());
+			Entity item = new EntityItem(p_149749_1_, p_149749_2_, p_149749_3_, p_149749_4_, itemstack);
+			p_149749_1_.spawnEntityInWorld(item);
+		} catch (Exception e) {
+			System.out.println("NO entity dropped!");
+			e.printStackTrace();
+		}
     }
 	
 	@Override
 	protected void dropBlockAsItem(World p_149642_1_, int p_149642_2_, int p_149642_3_, int p_149642_4_, ItemStack p_149642_5_){
-		try {
-			//TileEntity tile = TileEntityHelper.getTileEntityBaseScannerFromCoords(p_149642_1_, p_149642_2_, p_149642_3_, p_149642_4_);
-			//p_149642_5_.setTagCompound()); // TODO: do...something useful
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 		super.dropBlockAsItem(p_149642_1_, p_149642_2_, p_149642_3_, p_149642_4_, p_149642_5_);
 	}
 	

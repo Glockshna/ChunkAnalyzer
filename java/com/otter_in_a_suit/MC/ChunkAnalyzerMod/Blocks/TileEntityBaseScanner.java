@@ -3,7 +3,6 @@ package com.otter_in_a_suit.MC.ChunkAnalyzerMod.Blocks;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
 
 public class TileEntityBaseScanner extends TileEntity {
@@ -30,6 +29,13 @@ public class TileEntityBaseScanner extends TileEntity {
 
 	public void setSearchForBlock(Block b) {
 		this.searchFor_ID = Block.getIdFromBlock(b);
+	}
+	
+	public NBTTagCompound getNBTTagCompound(){
+		NBTTagCompound nbt = new NBTTagCompound();
+		nbt.setInteger("explosionThreshold", explosionThreshold);
+		nbt.setInteger("searchFor_ID", searchFor_ID);
+		return nbt;
 	}
 	
 	/************************
