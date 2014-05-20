@@ -9,7 +9,7 @@ import java.io.ObjectOutputStream;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-import com.otter_in_a_suit.MC.ChunkAnalyzerMod.Blocks.TileEntityBaseScanner;
+import com.otter_in_a_suit.MC.ChunkAnalyzerMod.Blocks.TileEntities.TileEntityBaseScanner;
 
 public class TileEntityHelper {
   public static byte[] serialize(Object obj) throws IOException {

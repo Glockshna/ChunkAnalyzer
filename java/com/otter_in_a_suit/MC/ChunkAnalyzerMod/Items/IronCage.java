@@ -8,7 +8,7 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.World;
 
 import com.otter_in_a_suit.MC.ChunkAnalyzerMod.CreativeInv;
-import com.otter_in_a_suit.MC.ChunkAnalyzerMod.Blocks.TileEntityBaseScanner;
+import com.otter_in_a_suit.MC.ChunkAnalyzerMod.Blocks.TileEntities.TileEntityBaseScanner;
 import com.otter_in_a_suit.MC.ChunkAnalyzerMod.Helper.TileEntityHelper;
 
 /**

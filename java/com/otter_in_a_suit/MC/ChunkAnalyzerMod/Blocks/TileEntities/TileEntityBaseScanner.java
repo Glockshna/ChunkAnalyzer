@@ -1,4 +1,4 @@
-package com.otter_in_a_suit.MC.ChunkAnalyzerMod.Blocks;
+package com.otter_in_a_suit.MC.ChunkAnalyzerMod.Blocks.TileEntities;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -47,15 +47,4 @@ public class TileEntityBaseScanner extends TileEntity {
     this.explosionThreshold = (par1.hasKey("explosionThreshold")) ? par1.getInteger("explosionThreshold") : explosionThreshold;
     this.searchFor_ID = (par1.hasKey("searchFor_ID")) ? par1.getInteger("searchFor_ID") : searchFor_ID;
   }
-
-  /************************
-   * Sending Tile Entity Data From Server to Client
-   *********************** 
-   * public Packet getDescriptionPacket() { NBTTagCompound nbtTag = new NBTTagCompound();
-   * this.writeToNBT(nbtTag); return new Packet132TileEntityData(this.xCoord, this.yCoord,
-   * this.zCoord, 1, nbtTag); }
-   * 
-   * public void onDataPacket(INetworkManager net, Packet132TileEntityData packet) {
-   * readFromNBT(packet.customParam1); }
-   */
 }

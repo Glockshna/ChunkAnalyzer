@@ -8,8 +8,11 @@ import com.otter_in_a_suit.MC.ChunkAnalyzerMod.Blocks.GoldScanner;
 import com.otter_in_a_suit.MC.ChunkAnalyzerMod.Blocks.IronScanner;
 import com.otter_in_a_suit.MC.ChunkAnalyzerMod.Blocks.MarkerTorch;
 import com.otter_in_a_suit.MC.ChunkAnalyzerMod.Blocks.StoneScanner;
+import com.otter_in_a_suit.MC.ChunkAnalyzerMod.Blocks.TileEntities.TileEntityMarker;
+import com.otter_in_a_suit.MC.ChunkAnalyzerMod.Blocks.TileEntities.TileEntityMarkerRenderer;
 import com.otter_in_a_suit.MC.ChunkAnalyzerMod.Items.IronCage;
 
+import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -28,6 +31,9 @@ public class ChunkAnalyzerMod {
 
   @EventHandler
   public void init(FMLInitializationEvent event) {
+ // Models
+    ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMarker.class, new TileEntityMarkerRenderer());
+    
     registerBlocks();
     registerItems();
     registerTileEntities();
@@ -56,7 +62,7 @@ public class ChunkAnalyzerMod {
 
   private void registerTileEntities() {
     GameRegistry.registerTileEntity(
-        com.otter_in_a_suit.MC.ChunkAnalyzerMod.Blocks.TileEntityBaseScanner.class, "stringID");
+        com.otter_in_a_suit.MC.ChunkAnalyzerMod.Blocks.TileEntities.TileEntityBaseScanner.class, "stringID");
   }
 
   private void registerRecepies() {

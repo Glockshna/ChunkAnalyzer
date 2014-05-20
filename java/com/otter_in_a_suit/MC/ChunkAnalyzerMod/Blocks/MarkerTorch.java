@@ -2,26 +2,33 @@ package com.otter_in_a_suit.MC.ChunkAnalyzerMod.Blocks;
 
 import java.util.Random;
 
-import net.minecraft.block.BlockSkull;
+import net.minecraft.block.BlockContainer;
+import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 
 import com.otter_in_a_suit.MC.ChunkAnalyzerMod.ChunkAnalyzerMod;
 import com.otter_in_a_suit.MC.ChunkAnalyzerMod.CreativeInv;
+import com.otter_in_a_suit.MC.ChunkAnalyzerMod.Blocks.TileEntities.TileEntityMarker;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 // BlockSkull
-public class MarkerTorch extends BlockSkull {
+public class MarkerTorch extends BlockContainer {
 
   public MarkerTorch() {
-    super();
+    super(Material.glass);
+    this.setBlockTextureName("chunkanalyzermod:Marker");
+    // this.setLightOpacity(100);
     this.setBlockName("Marker torch");
     this.setCreativeTab(CreativeInv._instance);
     this.setHardness(0.0F);
-    this.setLightLevel(0.9375f / 2);
+    this.setLightLevel(0.9375f);
     this.setStepSound(soundTypeCloth);
-    this.setBlockTextureName("chunkanalyzermod:Marker");
+    this.setBlockBounds(0.0f, 0.0f, 0.0f, .25f, 1.0f, .25f);
   }
 
   @Override
@@ -39,10 +46,29 @@ public class MarkerTorch extends BlockSkull {
   public boolean renderAsNormalBlock() {
     return true;
   }
-  
-  public int quantityDropped(Random p_149745_1_)
-  {
-      return 0;
+
+  @Override
+  public int quantityDropped(Random p_149745_1_) {
+    return 0;
+  }
+
+  @Override
+  public boolean isOpaqueCube() {
+    return false;
+  }
+
+  public TileEntity createNewTileEntity(World var1) {
+    return new TileEntityMarker();
+
+  }
+
+  public TileEntity createNewTileEntity(World var1, int var2) {
+    return new TileEntityMarker();
+  }
+
+  @Override
+  public AxisAlignedBB getCollisionBoundingBoxFromPool(World par1World, int par2, int par3, int par4) {
+    return AxisAlignedBB.getAABBPool().getAABB(0,0,0,0,0,0);
   }
 
 }

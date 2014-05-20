@@ -23,6 +23,7 @@ import net.minecraft.world.chunk.Chunk;
 import com.otter_in_a_suit.MC.ChunkAnalyzerMod.ChunkAnalyzerMod;
 import com.otter_in_a_suit.MC.ChunkAnalyzerMod.CreativeInv;
 import com.otter_in_a_suit.MC.ChunkAnalyzerMod.Randomizer;
+import com.otter_in_a_suit.MC.ChunkAnalyzerMod.Blocks.TileEntities.TileEntityBaseScanner;
 import com.otter_in_a_suit.MC.ChunkAnalyzerMod.Helper.PlayerHelper;
 import com.otter_in_a_suit.MC.ChunkAnalyzerMod.Helper.TileEntityHelper;
 import com.otter_in_a_suit.MC.ChunkAnalyzerMod.Helper.Vertex;
@@ -119,7 +120,7 @@ public abstract class BaseScanner extends BlockContainer implements IScanner {
    */
   protected ArrayList<Vertex> search(World p_149727_1_, EntityPlayer player, int x, int y, int z,
       Block searchFor, BaseScanner caller, boolean placeMarkers, boolean resetOnly) {
-    boolean debugPlacer = false;
+    boolean debugPlacer = true;
     if (searchFor == null || caller instanceof ChunkAnalyzer)
       placeMarkers = false;
 
@@ -242,10 +243,10 @@ public abstract class BaseScanner extends BlockContainer implements IScanner {
           Vertex v = findings.get(cc);
           // TODO getGroundLevelYAxsis
           ySky = WorldHelper.getGroundLevelYAxsis_i(p_149727_1_, v.z, y, v.z);
-          if (p_149727_1_.isAirBlock(v.x, ySky - 1, v.z)) {
-            p_149727_1_.setBlock(v.x, ySky - 1, v.z, Blocks.cobblestone);
-          }
-
+          /*
+           * if (p_149727_1_.isAirBlock(v.x, ySky - 1, v.z)) { p_149727_1_.setBlock(v.x, ySky - 1,
+           * v.z, Blocks.cobblestone); }
+           */
 
           // dont replace the scanner by a torch
           if (p_149727_1_.getBlock(v.x, ySky, v.z) != ChunkAnalyzerMod.markerTorch) {
@@ -263,8 +264,12 @@ public abstract class BaseScanner extends BlockContainer implements IScanner {
         System.out.println("XXX " + markerTorchCount);
         Vertex v = findings.get(0);
         ySky = WorldHelper.getGroundLevelYAxsis_i(p_149727_1_, v.z, y, v.z);
-        if (p_149727_1_.isAirBlock(v.x, ySky - 1, v.z))
-          p_149727_1_.setBlock(v.x, ySky - 1, v.z, Blocks.cobblestone);
+
+        /*
+         * if (p_149727_1_.isAirBlock(v.x, ySky - 1, v.z)) { p_149727_1_.setBlock(v.x, ySky - 1,
+         * v.z, Blocks.cobblestone); }
+         */
+
         p_149727_1_.setBlock(v.x, ySky, v.z, ChunkAnalyzerMod.markerTorch);
         System.out.println("Torch at " + v.x + ", " + ySky + ", " + v.z);
         if (!player.capabilities.isCreativeMode && playerNeedsTorches)

@@ -2,10 +2,10 @@ package com.otter_in_a_suit.MC.ChunkAnalyzerMod.Blocks;
 
 import java.util.ArrayList;
 
-import com.otter_in_a_suit.MC.ChunkAnalyzerMod.Helper.Vertex;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
+
+import com.otter_in_a_suit.MC.ChunkAnalyzerMod.Helper.Vertex;
 
 public class ChunkAnalyzer extends BaseScanner implements IScanner {
   public ChunkAnalyzer() {

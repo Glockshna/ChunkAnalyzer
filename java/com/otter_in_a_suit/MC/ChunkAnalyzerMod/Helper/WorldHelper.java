@@ -1,7 +1,5 @@
 package com.otter_in_a_suit.MC.ChunkAnalyzerMod.Helper;
 
-import com.otter_in_a_suit.MC.ChunkAnalyzerMod.Blocks.TileEntityBaseScanner;
-
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -10,6 +8,8 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.World;
+
+import com.otter_in_a_suit.MC.ChunkAnalyzerMod.Blocks.TileEntities.TileEntityBaseScanner;
 
 public class WorldHelper {
 
@@ -34,15 +34,12 @@ public class WorldHelper {
   // TODO: some fancy traytracing ?
   // TODO: TEST
   public static int getGroundLevelYAxsis_i(World world, int x, int y, int z) {
-    System.out.println("getGroundLevelYAxsis_i " + x + " " + y + " " + z);
     y = (y < 0) ? 0 : y;
     int i = 1;
     int blockAirCount = 0;
     while (i <= 256 && blockAirCount >= AIR_THRESHOLD_SKY) {
       y++;
       if (world.getBlock(x, y, z) == Blocks.air) {
-        System.out.println("world.getBlock(x, y, z) == Blocks.air: "
-            + (world.getBlock(x, y, z) == Blocks.air) + " , y: " + y);
         blockAirCount++;
       }
       i++;
