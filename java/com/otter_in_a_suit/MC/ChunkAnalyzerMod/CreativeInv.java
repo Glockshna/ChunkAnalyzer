@@ -8,16 +8,16 @@ import net.minecraft.item.Item;
 
 public class CreativeInv extends CreativeTabs {
 
-	public static CreativeInv _instance = new CreativeInv();
-	
-	private CreativeInv() {
-		super("Scanner Mod");
-	}
+  public static CreativeInv _instance = new CreativeInv();
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public Item getTabIconItem() {
-		return Item.getItemFromBlock(Blocks.iron_ore);
-	}
+  private CreativeInv() {
+    super("Scanner Mod");
+  }
+
+  @Override
+  @SideOnly(Side.CLIENT)
+  public Item getTabIconItem() {
+    return Item.getItemFromBlock(Blocks.iron_ore);
+  }
 
 }
