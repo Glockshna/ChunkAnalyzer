@@ -29,6 +29,7 @@ public class MarkerTorch extends BlockContainer {
     this.setLightLevel(0.9375f);
     this.setStepSound(soundTypeCloth);
     this.setBlockBounds(0.0f, 0.0f, 0.0f, .25f, 1.0f, .25f);
+    this.setLightOpacity(1);
   }
 
   @Override
@@ -68,7 +69,16 @@ public class MarkerTorch extends BlockContainer {
 
   @Override
   public AxisAlignedBB getCollisionBoundingBoxFromPool(World par1World, int par2, int par3, int par4) {
-    return AxisAlignedBB.getAABBPool().getAABB(0,0,0,0,0,0);
+    return AxisAlignedBB.getAABBPool().getAABB(0, 0, 0, 0, 0, 0);
+  }
+
+  @SideOnly(Side.CLIENT)
+  /**
+   * Returns which pass should this block be rendered on. 0 for solids and 1 for alpha
+   * Transparency
+   */
+  public int getRenderBlockPass() {
+    return 1;
   }
 
 }
