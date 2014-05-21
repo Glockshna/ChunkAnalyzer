@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 
+import com.otter_in_a_suit.MC.ChunkAnalyzerMod.ChunkAnalyzerMod;
 import com.otter_in_a_suit.MC.ChunkAnalyzerMod.Helper.Vertex;
+import com.otter_in_a_suit.MC.ChunkAnalyzerMod.Helper.WorldHelper;
 
 public class ChunkAnalyzer extends BaseScanner implements IScanner {
   public ChunkAnalyzer() {
@@ -26,15 +28,19 @@ public class ChunkAnalyzer extends BaseScanner implements IScanner {
     int x = p_149727_2_;
     int y = p_149727_3_;
     int z = p_149727_4_;
-
-   handleResult(scan(p_149727_1_, p_149727_5_, x, y, z, this));
    
+   if(ChunkAnalyzerMod.useXPForScanner){
+     if(p_149727_5_.experienceTotal >= getXPConsumtion()) {
+       p_149727_5_.experienceTotal -= getXPConsumtion();
+       handleResult(scan(p_149727_1_, p_149727_5_, x, y, z, this));
+     }
+     else WorldHelper.chat("Insufficient levels for scan!");
+   }
     return false;
   }
   
   private void handleResult(ArrayList<Vertex> result){
     if(result != null && result.size() > 0){
-      // TODO: implement TODO: use exp or similar
       for(Vertex v : result){
         System.out.println(v.y);
       }
@@ -43,6 +49,11 @@ public class ChunkAnalyzer extends BaseScanner implements IScanner {
 
   @Override
   public int getLevel() {
-    return LEVEL_CHUNK;
+    return LEVEL_CHUNK_ANALYZER;
+  }
+
+  public int getXPConsumtion() {
+    // TODO Auto-generated method stub
+    return 0;
   }
 }

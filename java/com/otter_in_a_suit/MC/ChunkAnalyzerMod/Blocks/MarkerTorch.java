@@ -2,22 +2,20 @@ package com.otter_in_a_suit.MC.ChunkAnalyzerMod.Blocks;
 
 import java.util.Random;
 
-import net.minecraft.block.BlockContainer;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 
 import com.otter_in_a_suit.MC.ChunkAnalyzerMod.ChunkAnalyzerMod;
 import com.otter_in_a_suit.MC.ChunkAnalyzerMod.CreativeInv;
-import com.otter_in_a_suit.MC.ChunkAnalyzerMod.Blocks.TileEntities.TileEntityMarker;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 // BlockSkull
-public class MarkerTorch extends BlockContainer {
+public class MarkerTorch extends Block {
 
   public MarkerTorch() {
     super(Material.glass);
@@ -56,15 +54,6 @@ public class MarkerTorch extends BlockContainer {
   @Override
   public boolean isOpaqueCube() {
     return false;
-  }
-
-  public TileEntity createNewTileEntity(World var1) {
-    return new TileEntityMarker();
-
-  }
-
-  public TileEntity createNewTileEntity(World var1, int var2) {
-    return new TileEntityMarker();
   }
 
   @Override

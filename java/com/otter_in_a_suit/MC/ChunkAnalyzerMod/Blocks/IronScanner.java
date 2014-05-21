@@ -10,6 +10,4 @@ public class IronScanner extends BaseScanner implements IScanner {
   public int getLevel() {
     return LEVEL_IRON;
   }
-
-
 }

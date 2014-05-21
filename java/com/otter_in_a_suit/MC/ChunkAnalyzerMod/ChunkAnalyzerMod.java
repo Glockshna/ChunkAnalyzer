@@ -3,19 +3,18 @@ package com.otter_in_a_suit.MC.ChunkAnalyzerMod;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.config.Configuration;
 
 import com.otter_in_a_suit.MC.ChunkAnalyzerMod.Blocks.GoldScanner;
 import com.otter_in_a_suit.MC.ChunkAnalyzerMod.Blocks.IronScanner;
 import com.otter_in_a_suit.MC.ChunkAnalyzerMod.Blocks.MarkerTorch;
 import com.otter_in_a_suit.MC.ChunkAnalyzerMod.Blocks.StoneScanner;
-import com.otter_in_a_suit.MC.ChunkAnalyzerMod.Blocks.TileEntities.TileEntityMarker;
-import com.otter_in_a_suit.MC.ChunkAnalyzerMod.Blocks.TileEntities.TileEntityMarkerRenderer;
 import com.otter_in_a_suit.MC.ChunkAnalyzerMod.Items.IronCage;
 
-import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 @Mod(modid = ChunkAnalyzerMod.MODID, version = ChunkAnalyzerMod.VERSION)
@@ -29,10 +28,21 @@ public class ChunkAnalyzerMod {
   public static MarkerTorch markerTorch;
   public static IronCage ironCage;
 
+  public static boolean useXPForScanner;
+  public static Configuration cfg;
+  
+  @EventHandler
+  public void preInit(FMLPreInitializationEvent event) {    
+    cfg = new Configuration(event.getSuggestedConfigurationFile());
+    cfg.load();
+    useXPForScanner = cfg.get(Configuration.CATEGORY_GENERAL, "useXPForScanner", true).getBoolean(true);
+    cfg.save();
+  }
+  
   @EventHandler
   public void init(FMLInitializationEvent event) {
  // Models
-    ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMarker.class, new TileEntityMarkerRenderer());
+    //ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMarker.class, new TileEntityMarkerRenderer());
     
     registerBlocks();
     registerItems();
