@@ -37,14 +37,18 @@ public class TileEntityBaseScanner extends TileEntity {
     nbt.setInteger("searchFor_ID", searchFor_ID);
     return nbt;
   }
-  
+
   /**
-   * Write values from NBT to this
-   * bit of an awkward solution, but since we ain't got no pointers making this more flexible is a pain, so I wrote it static for the time being
+   * Write values from NBT to this bit of an awkward solution, but since we ain't got no pointers
+   * making this more flexible is a pain, so I wrote it static for the time being
+   * 
    * @param par1: NBTTagCompound
    */
-  public void writeToParByNBT(NBTTagCompound par1){
-    this.explosionThreshold = (par1.hasKey("explosionThreshold")) ? par1.getInteger("explosionThreshold") : explosionThreshold;
-    this.searchFor_ID = (par1.hasKey("searchFor_ID")) ? par1.getInteger("searchFor_ID") : searchFor_ID;
+  public void writeToParByNBT(NBTTagCompound par1) {
+    this.explosionThreshold =
+        (par1.hasKey("explosionThreshold")) ? par1.getInteger("explosionThreshold")
+            : explosionThreshold;
+    this.searchFor_ID =
+        (par1.hasKey("searchFor_ID")) ? par1.getInteger("searchFor_ID") : searchFor_ID;
   }
 }

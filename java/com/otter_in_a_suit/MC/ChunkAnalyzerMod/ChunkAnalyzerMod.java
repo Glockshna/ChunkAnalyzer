@@ -20,7 +20,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 @Mod(modid = ChunkAnalyzerMod.MODID, version = ChunkAnalyzerMod.VERSION)
 public class ChunkAnalyzerMod {
   public static final String MODID = "chunkanalyzermod";
-  public static final String VERSION = "0.2b";
+  public static final String VERSION = "0.3b";
 
   public static StoneScanner stoneScanner;
   public static IronScanner ironScanner;
@@ -30,20 +30,22 @@ public class ChunkAnalyzerMod {
 
   public static boolean useXPForScanner;
   public static Configuration cfg;
-  
+
   @EventHandler
-  public void preInit(FMLPreInitializationEvent event) {    
+  public void preInit(FMLPreInitializationEvent event) {
     cfg = new Configuration(event.getSuggestedConfigurationFile());
     cfg.load();
-    useXPForScanner = cfg.get(Configuration.CATEGORY_GENERAL, "useXPForScanner", true).getBoolean(true);
+    useXPForScanner =
+        cfg.get(Configuration.CATEGORY_GENERAL, "useXPForScanner", true).getBoolean(true);
     cfg.save();
   }
-  
+
   @EventHandler
   public void init(FMLInitializationEvent event) {
- // Models
-    //ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMarker.class, new TileEntityMarkerRenderer());
-    
+    // Models
+    // ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMarker.class, new
+    // TileEntityMarkerRenderer());
+
     registerBlocks();
     registerItems();
     registerTileEntities();
@@ -72,30 +74,22 @@ public class ChunkAnalyzerMod {
 
   private void registerTileEntities() {
     GameRegistry.registerTileEntity(
-        com.otter_in_a_suit.MC.ChunkAnalyzerMod.Blocks.TileEntities.TileEntityBaseScanner.class, "stringID");
+        com.otter_in_a_suit.MC.ChunkAnalyzerMod.Blocks.TileEntities.TileEntityBaseScanner.class,
+        "stringID");
   }
 
   private void registerRecepies() {
-    GameRegistry.addRecipe(new ItemStack(stoneScanner), 
-        "SIS", 
-        "IRI", 
-        "SIS",
+    GameRegistry.addRecipe(new ItemStack(stoneScanner), "SIS", "IRI", "SIS",
         //
         'S', new ItemStack(Blocks.stone_slab), 'I', new ItemStack(Items.iron_pickaxe), 'R',
         new ItemStack(Items.redstone));
 
-    GameRegistry.addRecipe(new ItemStack(ironScanner), 
-        "SIS", 
-        "IRI", 
-        "SIS",
+    GameRegistry.addRecipe(new ItemStack(ironScanner), "SIS", "IRI", "SIS",
         //
         'S', new ItemStack(Blocks.iron_bars), 'I', new ItemStack(Items.iron_pickaxe), 'R',
         new ItemStack(stoneScanner));
 
-    GameRegistry.addRecipe(new ItemStack(goldScanner), 
-        "SIS", 
-        "IRI", 
-        "SIS",
+    GameRegistry.addRecipe(new ItemStack(goldScanner), "SIS", "IRI", "SIS",
         //
         'S', new ItemStack(Items.gold_ingot), 'I', new ItemStack(Items.golden_pickaxe), 'R',
         new ItemStack(ironScanner));

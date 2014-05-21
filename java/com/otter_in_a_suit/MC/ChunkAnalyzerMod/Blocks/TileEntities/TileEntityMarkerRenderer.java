@@ -1,10 +1,5 @@
 package com.otter_in_a_suit.MC.ChunkAnalyzerMod.Blocks.TileEntities;
 
-import org.lwjgl.opengl.GL11;
-
-import com.otter_in_a_suit.MC.ChunkAnalyzerMod.ChunkAnalyzerMod;
-import com.otter_in_a_suit.MC.ChunkAnalyzerMod.Models.ModelMarker;
-
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -15,12 +10,18 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
+import org.lwjgl.opengl.GL11;
+
+import com.otter_in_a_suit.MC.ChunkAnalyzerMod.ChunkAnalyzerMod;
+import com.otter_in_a_suit.MC.ChunkAnalyzerMod.Models.ModelMarker;
+
 /**
  * Thanks to http://www.minecraftforge.net/wiki/Custom_Tile_Entity_Renderer I have no clue what's
  * going on here But sure looks fancy
  */
 /**
  * CURRENTLY UNUSED
+ * 
  * @deprecated
  */
 public class TileEntityMarkerRenderer extends TileEntitySpecialRenderer {
@@ -71,7 +72,8 @@ public class TileEntityMarkerRenderer extends TileEntitySpecialRenderer {
     GL11.glScalef(0.0625f, 0.0625f, 0.0625f);
     GL11.glRotatef(180, 0, 0, 1);
 
-    Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(ChunkAnalyzerMod.MODID + "textures/blocks/Marker.png"));
+    Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(ChunkAnalyzerMod.MODID
+        + "textures/blocks/Marker.png"));
     /*
      * Place your rendering code here.
      */

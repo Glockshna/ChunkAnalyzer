@@ -156,7 +156,7 @@ public abstract class BaseScanner extends BlockContainer implements IScanner {
       p_149727_1_.setBlock(x2_border, y, z2_border, Blocks.redstone_block);
       p_149727_1_.setBlock(x1_border, y, z1_border, Blocks.redstone_block);
     }
-    long size = 0;
+    //long size = 0;
     int count = 0;
     int accountableCount = 0;
     boolean kBlocked = true;
@@ -171,7 +171,7 @@ public abstract class BaseScanner extends BlockContainer implements IScanner {
         for (int k = 0; k < 256; ++k) {
           Block block = p_149727_1_.getBlock(chunkX + i, k, chunkZ + j);
           if (block != Blocks.air) {
-            ++size;
+            //++size;
           }
           if (block == ChunkAnalyzerMod.markerTorch) {
             torchPositions.add(new Vertex((chunkX + i), k, (chunkZ + j), block));
@@ -195,27 +195,26 @@ public abstract class BaseScanner extends BlockContainer implements IScanner {
         }
       }
     }
-    
+
     boolean sufficientLevels = false;
-    if(ChunkAnalyzerMod.useXPForScanner && !player.capabilities.isCreativeMode){
-      sufficientLevels = player.experienceTotal >= (count*getXPConsumtion());
-      if(sufficientLevels){
-        player.addExperience(-1*(count*getXPConsumtion()));
-      }
-      else {
-        WorldHelper.chat("Insufficient levels for scan! You need at least "+(count*getXPConsumtion()-player.experienceTotal)+" more!");
+    if (ChunkAnalyzerMod.useXPForScanner && !player.capabilities.isCreativeMode) {
+      sufficientLevels = player.experienceTotal >= (count * getXPConsumtion());
+      if (sufficientLevels) {
+        player.addExperience(-1 * (count * getXPConsumtion()));
+      } else {
+        WorldHelper.chat("Insufficient XP for scan! You need at least "
+            + (count * getXPConsumtion() - player.experienceTotal) + " more!");
       }
     }
     sufficientLevels = (player.capabilities.isCreativeMode) ? true : sufficientLevels;
     // Delete markers
-    System.out.println("Torches: "+torchPositions.size()+" w "+resetOnly);
-    if(resetOnly || (ChunkAnalyzerMod.useXPForScanner && !sufficientLevels)){
-      System.out.println("RESET");
-      for(Vertex v : torchPositions){ 
+    System.out.println("Torches: " + torchPositions.size() + " w " + resetOnly);
+    if (resetOnly || (ChunkAnalyzerMod.useXPForScanner && !sufficientLevels)) {
+      for (Vertex v : torchPositions) {
         p_149727_1_.setBlockToAir(v.x, v.y, v.z);
       }
     }
-    
+
     if (placeMarkers && sufficientLevels)
       renderMarkerAndSendMSG(findings, p_149727_1_, player, x, y, z, searchFor, caller, count,
           accountableCount);
@@ -269,7 +268,8 @@ public abstract class BaseScanner extends BlockContainer implements IScanner {
            */
 
           // dont replace the scanner by a torch
-          if (p_149727_1_.getBlock(v.x, ySky, v.z) != ChunkAnalyzerMod.markerTorch && p_149727_1_.getBlock(v.x, ySky, v.z) != this) {
+          if (p_149727_1_.getBlock(v.x, ySky, v.z) != ChunkAnalyzerMod.markerTorch
+              && p_149727_1_.getBlock(v.x, ySky, v.z) != this) {
             p_149727_1_.spawnEntityInWorld(new EntityItem(p_149727_1_, x, y, z, new ItemStack(
                 p_149727_1_.getBlock(v.x, ySky, v.z))));
             p_149727_1_.setBlock(v.x, ySky, v.z, ChunkAnalyzerMod.markerTorch);
@@ -288,11 +288,11 @@ public abstract class BaseScanner extends BlockContainer implements IScanner {
          * if (p_149727_1_.isAirBlock(v.x, ySky - 1, v.z)) { p_149727_1_.setBlock(v.x, ySky - 1,
          * v.z, Blocks.cobblestone); }
          */
-        if(p_149727_1_.getBlock(v.x, ySky, v.z) != this){
+        if (p_149727_1_.getBlock(v.x, ySky, v.z) != this) {
           p_149727_1_.setBlock(v.x, ySky, v.z, ChunkAnalyzerMod.markerTorch);
           System.out.println("Torch at " + v.x + ", " + ySky + ", " + v.z);
         }
-        
+
         if (!player.capabilities.isCreativeMode && playerNeedsTorches)
           player.inventory.consumeInventoryItem(marker);
       }
@@ -443,9 +443,10 @@ public abstract class BaseScanner extends BlockContainer implements IScanner {
     float strength = 2.0f; // 4.0 = TNT
     world.createExplosion(null, x, y, z, strength, true);
   }
-  
+
   public int getXPConsumtion() {
-    if(getLevel() == LEVEL_GOLD) return 0; // free stuff, yay!
+    if (getLevel() == LEVEL_GOLD)
+      return 0; // free stuff, yay!
     return (int) Math.ceil((XP_BASE_CONSUMPTION * getLevel() * XP_BASE_MODIFIER));
   }
 }

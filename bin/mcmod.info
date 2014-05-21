@@ -2,7 +2,7 @@
 {
   "modid": "chunkanalyzermod",
   "name": "Chunk Analyzer Mod",
-  "description": "Example placeholder mod.",
+  "description": "A mod to analyze your chunks for couple of ressources.",
   "version": "${version}",
   "mcversion": "${mcversion}",
   "url": "",

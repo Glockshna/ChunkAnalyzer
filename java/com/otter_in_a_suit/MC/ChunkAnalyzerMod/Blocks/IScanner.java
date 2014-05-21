@@ -6,10 +6,11 @@ public interface IScanner {
   public final static int LEVEL_IRON = 2;
   public final static int LEVEL_GOLD = 1;
   public final static int LEVEL_CHUNK_ANALYZER = 10;
-  
+
   public final static float XP_BASE_CONSUMPTION = 1f;
   public final static float XP_BASE_MODIFIER = .3f;
-  
+
   public abstract int getLevel();
+
   public abstract int getXPConsumtion();
 }

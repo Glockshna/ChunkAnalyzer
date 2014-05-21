@@ -39,34 +39,34 @@ public class PlayerHelper {
     }
     return count;
   }
-  
-  public static float getXPCostByLevel(int currentLevel){
-    if(currentLevel <= 15){
-      return (currentLevel*17);
-    }else if(currentLevel >= 16 && currentLevel <= 31) {
-      return (float) ((Math.pow(1.5*currentLevel,2) - 29.5*currentLevel + 360));
-    }else if(currentLevel >= 32) {
-      return (float) ((Math.pow(3.5*currentLevel,2) - 151.5*currentLevel + 2220));
+
+  public static float getXPCostByLevel(int currentLevel) {
+    if (currentLevel <= 15) {
+      return (currentLevel * 17);
+    } else if (currentLevel >= 16 && currentLevel <= 31) {
+      return (float) ((Math.pow(1.5 * currentLevel, 2) - 29.5 * currentLevel + 360));
+    } else if (currentLevel >= 32) {
+      return (float) ((Math.pow(3.5 * currentLevel, 2) - 151.5 * currentLevel + 2220));
     }
     return 0f;
   }
-  
+
   /*
    * TODO: finish
    */
   @Deprecated
-  public static float getRequiredLevel(int currentlevel, int xp){
+  public static float getRequiredLevel(int currentlevel, int xp) {
     float xp_cur = getXPCostByLevel(currentlevel);
-    return 0; 
+    return 0;
   }
-  
+
   public static int expCost(int currentLevel) {
     if (currentLevel >= 30) {
-        return 62 + (currentLevel - 30) * 7;
+      return 62 + (currentLevel - 30) * 7;
     } else if (currentLevel >= 15) {
-        return 17 + (currentLevel - 15) * 3;
+      return 17 + (currentLevel - 15) * 3;
     } else {
-        return 17;
+      return 17;
     }
-}
+  }
 }

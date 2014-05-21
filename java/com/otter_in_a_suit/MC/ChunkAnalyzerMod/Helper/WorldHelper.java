@@ -89,7 +89,8 @@ public class WorldHelper {
     }
   }
 
-  public static boolean dropBlockAsItemWithTileEntity(World world, int x, int y, int z, Block parItem) {
+  public static boolean dropBlockAsItemWithTileEntity(World world, int x, int y, int z,
+      Block parItem) {
     return dropBlockAsItemWithTileEntity(world, x, y, z, parItem, null);
   }
 }

@@ -3,8 +3,10 @@ package com.otter_in_a_suit.MC.ChunkAnalyzerMod.Models;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
+
 /**
  * CURRENTLY UNUSED
+ * 
  * @deprecated
  */
 public class ModelMarker extends ModelBase {
