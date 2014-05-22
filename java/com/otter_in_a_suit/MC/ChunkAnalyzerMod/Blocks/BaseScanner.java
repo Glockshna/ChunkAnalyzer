@@ -29,6 +29,8 @@ import com.otter_in_a_suit.MC.ChunkAnalyzerMod.Helper.TileEntityHelper;
 import com.otter_in_a_suit.MC.ChunkAnalyzerMod.Helper.Vertex;
 import com.otter_in_a_suit.MC.ChunkAnalyzerMod.Helper.WorldHelper;
 
+import cpw.mods.fml.common.network.internal.FMLNetworkHandler;
+
 public abstract class BaseScanner extends BlockContainer implements IScanner {
 
   /*************************
@@ -66,6 +68,10 @@ public abstract class BaseScanner extends BlockContainer implements IScanner {
     int y = p_149727_3_;
     int z = p_149727_4_;
 
+    // TODO: TEST
+     FMLNetworkHandler.openGui(p_149727_5_, ChunkAnalyzerMod._instance, 0, p_149727_1_, x, y, z);
+    if(true) return true;
+    
     // Set searchFor-block
     Block searchFor = Blocks.iron_ore;
     try {

@@ -9,6 +9,7 @@ import com.otter_in_a_suit.MC.ChunkAnalyzerMod.Blocks.GoldScanner;
 import com.otter_in_a_suit.MC.ChunkAnalyzerMod.Blocks.IronScanner;
 import com.otter_in_a_suit.MC.ChunkAnalyzerMod.Blocks.MarkerTorch;
 import com.otter_in_a_suit.MC.ChunkAnalyzerMod.Blocks.StoneScanner;
+import com.otter_in_a_suit.MC.ChunkAnalyzerMod.Blocks.GUI.GUIHandler;
 import com.otter_in_a_suit.MC.ChunkAnalyzerMod.Items.IronCage;
 
 import cpw.mods.fml.common.Mod;
@@ -19,6 +20,8 @@ import cpw.mods.fml.common.registry.GameRegistry;
 
 @Mod(modid = ChunkAnalyzerMod.MODID, version = ChunkAnalyzerMod.VERSION)
 public class ChunkAnalyzerMod {
+  public static ChunkAnalyzerMod _instance;
+  
   public static final String MODID = "chunkanalyzermod";
   public static final String VERSION = "0.3b";
 
@@ -31,8 +34,10 @@ public class ChunkAnalyzerMod {
   public static boolean useXPForScanner;
   public static Configuration cfg;
 
+  public static GUIHandler GUIHandler;
   @EventHandler
   public void preInit(FMLPreInitializationEvent event) {
+    _instance = this;
     cfg = new Configuration(event.getSuggestedConfigurationFile());
     cfg.load();
     useXPForScanner =
@@ -50,6 +55,10 @@ public class ChunkAnalyzerMod {
     registerItems();
     registerTileEntities();
     registerRecepies();
+    
+    // GUI
+    GUIHandler = new GUIHandler();
+    cpw.mods.fml.common.network.NetworkRegistry.INSTANCE.registerGuiHandler(this,GUIHandler);
 
     // TODO: texture
   }
@@ -76,6 +85,7 @@ public class ChunkAnalyzerMod {
     GameRegistry.registerTileEntity(
         com.otter_in_a_suit.MC.ChunkAnalyzerMod.Blocks.TileEntities.TileEntityBaseScanner.class,
         "stringID");
+
   }
 
   private void registerRecepies() {
