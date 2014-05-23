@@ -38,7 +38,7 @@ public class ChunkAnalyzerMod {
   public static ChunkAnalyzerMod _instance;
 
   public static final String MODID = "chunkanalyzermod";
-  public static final String VERSION = "0.3b";
+  public static final String VERSION = "0.5b";
 
   public static WoodenScanner woodenScanner;
   public static IronScanner ironScanner;
