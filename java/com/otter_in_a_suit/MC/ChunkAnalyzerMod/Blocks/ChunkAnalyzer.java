@@ -10,6 +10,8 @@ import com.otter_in_a_suit.MC.ChunkAnalyzerMod.Helper.Vertex;
 import com.otter_in_a_suit.MC.ChunkAnalyzerMod.Helper.WorldHelper;
 
 public class ChunkAnalyzer extends BaseScanner implements IScanner {
+  
+  @Deprecated
   public ChunkAnalyzer() {
     this.setBlockName("Chunk analyzer");
     this.setBlockTextureName("chunkanalyzermod:GoldScanner");
@@ -52,6 +54,7 @@ public class ChunkAnalyzer extends BaseScanner implements IScanner {
     return LEVEL_CHUNK_ANALYZER;
   }
 
+  @Override
   public int getXPConsumtion() {
     // TODO Auto-generated method stub
     return 0;

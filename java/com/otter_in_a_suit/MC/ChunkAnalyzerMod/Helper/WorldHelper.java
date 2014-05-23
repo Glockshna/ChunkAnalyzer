@@ -32,7 +32,6 @@ public class WorldHelper {
 
 
   // TODO: some fancy traytracing ?
-  // TODO: TEST
   public static int getGroundLevelYAxsis_i(World world, int x, int y, int z) {
     y = (y < 0) ? 0 : y;
     int i = 1;

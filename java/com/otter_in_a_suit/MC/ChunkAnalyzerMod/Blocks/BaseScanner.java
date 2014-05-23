@@ -1,12 +1,8 @@
 package com.otter_in_a_suit.MC.ChunkAnalyzerMod.Blocks;
 
-/**
- * TODO: Chunk analyzer
- */
+
 import java.util.ArrayList;
 import java.util.Random;
-
-import org.lwjgl.input.Keyboard;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
@@ -22,6 +18,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+
+import org.lwjgl.input.Keyboard;
 
 import com.otter_in_a_suit.MC.ChunkAnalyzerMod.ChunkAnalyzerMod;
 import com.otter_in_a_suit.MC.ChunkAnalyzerMod.CreativeInv;
@@ -88,9 +86,8 @@ public abstract class BaseScanner extends BlockContainer implements IScanner {
          * Block.getIdFromBlock(searchFor); } else {
          */
         // if no item held in hand or no block, use stored tile
-        searchFor = Block.getBlockById(tile.searchFor_ID);
+        searchFor = tile.getStoredBlock();
         // }
-        System.out.println("Stored " + Block.getBlockById(tile.searchFor_ID));
         if (searchFor == null || searchFor == Blocks.air) {
           WorldHelper.chat("Couldn't read or store a (stored) block!");
           return false;
@@ -349,13 +346,13 @@ public abstract class BaseScanner extends BlockContainer implements IScanner {
       TileEntityBaseScanner tile =
           TileEntityHelper.getTileEntityBaseScannerFromCoords(world, x, y, z);
       ItemStack storedBlockAsItem = tile.getStackInSlotOnClosing(0);
-      
+
       if (isExplode == Randomizer.LEVEL_EXPL_DES) {
         triggerExplosion(world, x, y, z);
       } else if (isExplode == Randomizer.LEVEL_EXPL_PRES || isExplode == Randomizer.LEVEL_PRESERVE) {
         System.out.println("no boom =(");
         this.dropBlockAsItem(world, x, y, z);
-        if(storedBlockAsItem != null){
+        if (storedBlockAsItem != null) {
           Entity item = new EntityItem(world, x, y, z, storedBlockAsItem);
           world.spawnEntityInWorld(item);
         }
@@ -371,9 +368,9 @@ public abstract class BaseScanner extends BlockContainer implements IScanner {
    * OVERRIDEN FROM SUPER W/O MAJOR ADJUSTMENTS
    ************************/
   @Override
-  public void breakBlock(World p_149749_1_, int p_149749_2_, int p_149749_3_, int p_149749_4_,
-      Block p_149749_5_, int p_149749_6_) {
-    super.breakBlock(p_149749_1_, p_149749_2_, p_149749_3_, p_149749_4_, p_149749_5_, p_149749_6_);
+  public void breakBlock(World world, int x, int y, int z,
+      Block block, int p_149749_6_) {
+    super.breakBlock(world, x, y, z, block, p_149749_6_);
     // p_149749_1_.removeTileEntity(p_149749_2_, p_149749_3_, p_149749_4_);
   }
 
@@ -382,23 +379,23 @@ public abstract class BaseScanner extends BlockContainer implements IScanner {
   }
 
   @Override
-  protected void dropBlockAsItem(World p_149642_1_, int p_149642_2_, int p_149642_3_,
-      int p_149642_4_, ItemStack p_149642_5_) {
+  protected void dropBlockAsItem(World world, int x, int y,
+      int z, ItemStack itemStack) {
     try {
       TileEntityBaseScanner tile =
-          TileEntityHelper.getTileEntityBaseScannerFromCoords(p_149642_1_, p_149642_2_,
-              p_149642_3_, p_149642_4_);
+          TileEntityHelper.getTileEntityBaseScannerFromCoords(world, x,
+              y, z);
       String display = "";
-      System.out.println(tile.getNBTTagCompound().getInteger("explosionThreshold")); // TODO: check
-      if (tile.getNBTTagCompound().getInteger("explosionThreshold") != Randomizer.EXPLOSION_THRESHOLD_BASE)
+
+      if (tile.getNBTTagCompound().getInteger("explosionThreshold") != Randomizer.EXPLOSION_THRESHOLD_BASE_C)
         display += "Reenforced ";
       display += "Scanner";
       display +=
           ", Target: "
-              + Block.getBlockById(tile.getNBTTagCompound().getInteger("searchFor_ID"))
+              + tile.getStoredBlock()
                   .getUnlocalizedName().substring(5);
 
-      WorldHelper.dropBlockAsItemWithTileEntity(p_149642_1_, p_149642_2_, p_149642_3_, p_149642_4_,
+      WorldHelper.dropBlockAsItemWithTileEntity(world, x, y, z,
           this, display);
     } catch (Exception e) {
       e.printStackTrace();
@@ -406,19 +403,19 @@ public abstract class BaseScanner extends BlockContainer implements IScanner {
   }
 
   @Override
-  public void onBlockPlacedBy(World p_149689_1_, int p_149689_2_, int p_149689_3_, int p_149689_4_,
-      EntityLivingBase p_149689_5_, ItemStack p_149689_6_) {
-    if (p_149689_1_.isRemote)
+  public void onBlockPlacedBy(World world, int x, int y, int z,
+      EntityLivingBase p_149689_5_, ItemStack itemStack) {
+    if (world.isRemote)
       return;
 
     try {
-      NBTTagCompound nbt = p_149689_6_.getTagCompound();
+      NBTTagCompound nbt = itemStack.getTagCompound();
       if (nbt != null) {
         TileEntityBaseScanner tile = new TileEntityBaseScanner();
         // tile.writeToNBT(nbt);
         tile.writeToParByNBT(nbt);
         System.out.println(tile.explosionThreshold);
-        p_149689_1_.setTileEntity(p_149689_2_, p_149689_3_, p_149689_4_, tile);
+        world.setTileEntity(x, y, z, tile);
       } else {
         System.out.println("No NBT");
       }

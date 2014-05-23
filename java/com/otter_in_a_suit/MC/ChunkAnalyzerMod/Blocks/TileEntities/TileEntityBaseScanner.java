@@ -5,19 +5,20 @@ package com.otter_in_a_suit.MC.ChunkAnalyzerMod.Blocks.TileEntities;
  */
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
-public class TileEntityBaseScanner extends TileEntity implements IInventory{
+public class TileEntityBaseScanner extends TileEntity implements IInventory {
   private ItemStack[] inventory;
-  
-  public TileEntityBaseScanner(){
+
+  public TileEntityBaseScanner() {
     inventory = new ItemStack[1];
   }
-  
+
   public int explosionThreshold = 50;
   public int searchFor_ID;// = Block.getIdFromBlock(Blocks.iron_ore);
 
@@ -25,29 +26,29 @@ public class TileEntityBaseScanner extends TileEntity implements IInventory{
   public void writeToNBT(NBTTagCompound compound) {
     super.writeToNBT(compound);
     compound.setInteger("explosionThreshold", explosionThreshold);
-   
+
     System.out.println("writeToNBT called");
-    for(int i = 0; i < getSizeInventory(); i++) {
-          ItemStack itemstack = getStackInSlot(i);
-          if(itemstack != null) {
-            System.out.println(itemstack);
-            compound.setInteger("searchFor_ID", searchFor_ID);
-          } else{
-            System.out.println("itemstack null");
-            //compound.setInteger("searchFor_ID", Block.getIdFromBlock(Blocks.iron_ore));
-          }
+    for (int i = 0; i < getSizeInventory(); i++) {
+      ItemStack itemstack = getStackInSlot(i);
+      if (itemstack != null) {
+        System.out.println(itemstack);
+        compound.setInteger("searchFor_ID", searchFor_ID);
+      } else {
+        System.out.println("itemstack null");
+        // compound.setInteger("searchFor_ID", Block.getIdFromBlock(Blocks.iron_ore));
+      }
     }
   }
-  
+
   @Override
   public void readFromNBT(NBTTagCompound compound) {
     super.readFromNBT(compound);
     this.explosionThreshold = compound.getInteger("explosionThreshold");
     this.searchFor_ID = compound.getInteger("searchFor_ID");
-    System.out.println("readFromNBT "+searchFor_ID);
+    System.out.println("readFromNBT " + searchFor_ID);
     Item i = Item.getItemById(searchFor_ID);
-    if(i != null){
-      setInventorySlotContents(0, new ItemStack(i,1));
+    if (i != null) {
+      setInventorySlotContents(0, new ItemStack(i, 1));
     }
   }
 
@@ -81,7 +82,7 @@ public class TileEntityBaseScanner extends TileEntity implements IInventory{
   }
 
   /**
-   * CUSTOM GUI 
+   * CUSTOM GUI
    */
   public int getSizeInventory() {
     return inventory.length;
@@ -105,25 +106,33 @@ public class TileEntityBaseScanner extends TileEntity implements IInventory{
     return itemstack;
   }
 
-  
+
   public ItemStack getStackInSlotOnClosing(int slot) {
     ItemStack itemstack = getStackInSlot(slot);
     setInventorySlotContents(slot, null);
     return itemstack;
   }
-  
-  public Block getStoredBlock(){
-    return null;
+
+  /**
+   * 
+   * @return Blocks.air = null
+   */
+  public Block getStoredBlock() {
+    Block b = Block.getBlockById(this.searchFor_ID);
+    if(b == null || b == Blocks.air) return Blocks.air;
+    else return b;
   }
 
   /*
    * Called every time something changes w/in the inventory?
-   * @see net.minecraft.inventory.IInventory#setInventorySlotContents(int, net.minecraft.item.ItemStack)
+   * 
+   * @see net.minecraft.inventory.IInventory#setInventorySlotContents(int,
+   * net.minecraft.item.ItemStack)
    */
   public void setInventorySlotContents(int slot, ItemStack itemstack) {
-    if(slot == 0 && itemstack != null){
+    if (slot == 0 && itemstack != null) {
       Block b = Block.getBlockFromItem(itemstack.getItem());
-      if (b != null){
+      if (b != null) {
         this.searchFor_ID = Block.getIdFromBlock(b);
       }
     }
@@ -152,11 +161,11 @@ public class TileEntityBaseScanner extends TileEntity implements IInventory{
   }
 
   public void openInventory() {
-    // 
+    //
   }
 
   public void closeInventory() {
-    // 
+    //
   }
 
   public boolean isItemValidForSlot(int var1, ItemStack var2) {

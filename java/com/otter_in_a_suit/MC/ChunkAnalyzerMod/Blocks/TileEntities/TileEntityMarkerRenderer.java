@@ -24,6 +24,7 @@ import com.otter_in_a_suit.MC.ChunkAnalyzerMod.Models.ModelMarker;
  * 
  * @deprecated
  */
+@Deprecated
 public class TileEntityMarkerRenderer extends TileEntitySpecialRenderer {
   private ModelMarker model;
 

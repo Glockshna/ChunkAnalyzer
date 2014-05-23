@@ -4,6 +4,7 @@ public class Randomizer {
 
   public static int EXPLOSION_THRESHOLD_BASE = 50;
 
+  public final static int EXPLOSION_THRESHOLD_BASE_C = 50;
   public static final int LEVEL_EXPL_DES = 0;
   public static final int LEVEL_EXPL_PRES = 1;
   public static final int LEVEL_PRESERVE = 2;

@@ -17,11 +17,26 @@ import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
+/**
+ * Chunk Analyzer Mod by 
+ * @author otter-in-a-suit
+ * @see https://www.otter-in-a-suit.com
+ * Current version as of 2014-05-23
+ * For Minecraft 1.7.2
+ */
 
+/* Global ToDo:
+ * TODO: Chunk analyzer 
+ * TODO: getGroundLevelYAxsis_i 
+ * TODO: clean up the code, properly implement helper, maybe create an own helper-jar...
+ * -> https://image-store.slidesharecdn.com/8237aa56-e138-11e3-8a7e-22000ab82dd9-large.jpeg 
+ * TODO: Remote Terminal 
+ * TODO: mobile scanner
+ */
 @Mod(modid = ChunkAnalyzerMod.MODID, version = ChunkAnalyzerMod.VERSION)
 public class ChunkAnalyzerMod {
   public static ChunkAnalyzerMod _instance;
-  
+
   public static final String MODID = "chunkanalyzermod";
   public static final String VERSION = "0.3b";
 
@@ -35,6 +50,7 @@ public class ChunkAnalyzerMod {
   public static Configuration cfg;
 
   public static GUIHandler GUIHandler;
+
   @EventHandler
   public void preInit(FMLPreInitializationEvent event) {
     _instance = this;
@@ -47,18 +63,18 @@ public class ChunkAnalyzerMod {
 
   @EventHandler
   public void init(FMLInitializationEvent event) {
-    // Models
-    // ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMarker.class, new
-    // TileEntityMarkerRenderer());
-
     registerBlocks();
     registerItems();
     registerTileEntities();
     registerRecepies();
-    
+
     // GUI
     GUIHandler = new GUIHandler();
-    cpw.mods.fml.common.network.NetworkRegistry.INSTANCE.registerGuiHandler(this,GUIHandler);
+    cpw.mods.fml.common.network.NetworkRegistry.INSTANCE.registerGuiHandler(this, GUIHandler);
+    
+    // Models
+    // ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMarker.class, new
+    // TileEntityMarkerRenderer());
   }
 
   private void registerBlocks() {
@@ -89,12 +105,12 @@ public class ChunkAnalyzerMod {
   private void registerRecepies() {
     GameRegistry.addRecipe(new ItemStack(woodenScanner), "SIS", "IRI", "SIS",
         //
-        'S', new ItemStack(Blocks.stone_slab), 'I', new ItemStack(Items.iron_pickaxe), 'R',
+        'S', new ItemStack(Blocks.wooden_slab), 'I', new ItemStack(Items.wooden_pickaxe), 'R',
         new ItemStack(Items.redstone));
 
     GameRegistry.addRecipe(new ItemStack(ironScanner), "SIS", "IRI", "SIS",
         //
-        'S', new ItemStack(Blocks.iron_bars), 'I', new ItemStack(Items.iron_pickaxe), 'R',
+        'S', new ItemStack(Items.iron_ingot), 'I', new ItemStack(Items.iron_pickaxe), 'R',
         new ItemStack(woodenScanner));
 
     GameRegistry.addRecipe(new ItemStack(goldScanner), "SIS", "IRI", "SIS",

@@ -1,17 +1,19 @@
 package com.otter_in_a_suit.MC.ChunkAnalyzerMod.Blocks.GUI;
 
-import org.lwjgl.opengl.GL11;
-
-import com.otter_in_a_suit.MC.ChunkAnalyzerMod.ChunkAnalyzerMod;
-import com.otter_in_a_suit.MC.ChunkAnalyzerMod.Blocks.TileEntities.TileEntityBaseScanner;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 
- /**
-  * http://www.minecraftforum.net/topic/1931778-162-advanced-minecraft-forge-modding-tutorial-1-interfaces-part-3/
-  */
+import org.lwjgl.opengl.GL11;
+
+import com.otter_in_a_suit.MC.ChunkAnalyzerMod.ChunkAnalyzerMod;
+import com.otter_in_a_suit.MC.ChunkAnalyzerMod.Blocks.TileEntities.TileEntityBaseScanner;
+
+/**
+ * http://www.minecraftforum.net/topic/1931778-162-advanced-minecraft-forge-modding-tutorial-1-
+ * interfaces-part-3/
+ */
 public class GUIScanner extends GuiContainer {
   public static final ResourceLocation texture = new ResourceLocation(
       ChunkAnalyzerMod.MODID.toLowerCase(), "textures/gui/deployer.png");
@@ -22,7 +24,7 @@ public class GUIScanner extends GuiContainer {
     xSize = 176;
     ySize = 165;
   }
-  
+
   @Override
   protected void drawGuiContainerBackgroundLayer(float var1, int var2, int var3) {
     GL11.glColor4f(1F, 1F, 1F, 1F); // RGBA

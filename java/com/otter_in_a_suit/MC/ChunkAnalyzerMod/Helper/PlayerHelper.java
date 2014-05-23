@@ -57,7 +57,7 @@ public class PlayerHelper {
   @Deprecated
   public static float getRequiredLevel(int currentlevel, int xp) {
     float xp_cur = getXPCostByLevel(currentlevel);
-    return 0;
+    return xp_cur;
   }
 
   public static int expCost(int currentLevel) {

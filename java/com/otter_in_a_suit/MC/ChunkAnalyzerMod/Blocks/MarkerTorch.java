@@ -14,13 +14,11 @@ import com.otter_in_a_suit.MC.ChunkAnalyzerMod.CreativeInv;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-// BlockSkull
 public class MarkerTorch extends Block {
 
   public MarkerTorch() {
     super(Material.glass);
     this.setBlockTextureName("chunkanalyzermod:Marker");
-    // this.setLightOpacity(100);
     this.setBlockName("Marker torch");
     this.setCreativeTab(CreativeInv._instance);
     this.setHardness(0.0F);
@@ -56,16 +54,23 @@ public class MarkerTorch extends Block {
     return false;
   }
 
+  /*
+   * Makes block walkthrough, at least for players
+   * (non-Javadoc)
+   * @see net.minecraft.block.Block#getCollisionBoundingBoxFromPool(net.minecraft.world.World, int, int, int)
+   */
   @Override
   public AxisAlignedBB getCollisionBoundingBoxFromPool(World par1World, int par2, int par3, int par4) {
     return AxisAlignedBB.getAABBPool().getAABB(0, 0, 0, 0, 0, 0);
   }
 
-  @SideOnly(Side.CLIENT)
-  /**
+  /*
    * Returns which pass should this block be rendered on. 0 for solids and 1 for alpha
    * Transparency
+   * @see net.minecraft.block.Block#getRenderBlockPass()
    */
+  @Override
+  @SideOnly(Side.CLIENT)
   public int getRenderBlockPass() {
     return 1;
   }
