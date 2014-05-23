@@ -17,7 +17,7 @@ public class CreativeInv extends CreativeTabs {
   @Override
   @SideOnly(Side.CLIENT)
   public Item getTabIconItem() {
-    return Item.getItemFromBlock(Blocks.iron_ore);
+    return Item.getItemFromBlock(Blocks.gold_ore);
   }
 
 }

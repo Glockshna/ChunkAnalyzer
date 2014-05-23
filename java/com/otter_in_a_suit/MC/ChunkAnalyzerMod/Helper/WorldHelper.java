@@ -70,8 +70,6 @@ public class WorldHelper {
       Block parItem, String displayName) {
     System.out.println("dropBlockAsItem");
 
-    // super.dropBlockAsItem(p_149642_1_, p_149642_2_, p_149642_3_, p_149642_4_, p_149642_5_);
-    // TODO: TEST
     try {
       TileEntityBaseScanner tile =
           TileEntityHelper.getTileEntityBaseScannerFromCoords(world, x, y, z);

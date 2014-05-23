@@ -2,7 +2,7 @@ package com.otter_in_a_suit.MC.ChunkAnalyzerMod;
 
 public class Randomizer {
 
-  private int EXPLOSION_THRESHOLD_BASE = 50;
+  public static int EXPLOSION_THRESHOLD_BASE = 50;
 
   public static final int LEVEL_EXPL_DES = 0;
   public static final int LEVEL_EXPL_PRES = 1;

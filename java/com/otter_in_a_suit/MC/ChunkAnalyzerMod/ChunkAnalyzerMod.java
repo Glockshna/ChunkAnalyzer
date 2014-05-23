@@ -59,8 +59,6 @@ public class ChunkAnalyzerMod {
     // GUI
     GUIHandler = new GUIHandler();
     cpw.mods.fml.common.network.NetworkRegistry.INSTANCE.registerGuiHandler(this,GUIHandler);
-
-    // TODO: texture
   }
 
   private void registerBlocks() {

@@ -1,9 +1,12 @@
 package com.otter_in_a_suit.MC.ChunkAnalyzerMod.Blocks.TileEntities;
 
+/**
+ * Probably the worst implementation of a TileEntity since pre-alpha-pre-Notch's-birth
+ */
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -11,21 +14,41 @@ import net.minecraft.tileentity.TileEntity;
 public class TileEntityBaseScanner extends TileEntity implements IInventory{
   private ItemStack[] inventory;
   
-  public int explosionThreshold = 50;
-  public int searchFor_ID = Block.getIdFromBlock(Blocks.iron_ore);
-
-  @Override
-  public void writeToNBT(NBTTagCompound par1) {
-    super.writeToNBT(par1);
-    par1.setInteger("explosionThreshold", explosionThreshold);
-    par1.setInteger("searchFor_ID", searchFor_ID);
+  public TileEntityBaseScanner(){
+    inventory = new ItemStack[1];
   }
+  
+  public int explosionThreshold = 50;
+  public int searchFor_ID;// = Block.getIdFromBlock(Blocks.iron_ore);
 
   @Override
-  public void readFromNBT(NBTTagCompound par1) {
-    super.readFromNBT(par1);
-    this.explosionThreshold = par1.getInteger("explosionThreshold");
-    this.searchFor_ID = par1.getInteger("searchFor_ID");
+  public void writeToNBT(NBTTagCompound compound) {
+    super.writeToNBT(compound);
+    compound.setInteger("explosionThreshold", explosionThreshold);
+   
+    System.out.println("writeToNBT called");
+    for(int i = 0; i < getSizeInventory(); i++) {
+          ItemStack itemstack = getStackInSlot(i);
+          if(itemstack != null) {
+            System.out.println(itemstack);
+            compound.setInteger("searchFor_ID", searchFor_ID);
+          } else{
+            System.out.println("itemstack null");
+            //compound.setInteger("searchFor_ID", Block.getIdFromBlock(Blocks.iron_ore));
+          }
+    }
+  }
+  
+  @Override
+  public void readFromNBT(NBTTagCompound compound) {
+    super.readFromNBT(compound);
+    this.explosionThreshold = compound.getInteger("explosionThreshold");
+    this.searchFor_ID = compound.getInteger("searchFor_ID");
+    System.out.println("readFromNBT "+searchFor_ID);
+    Item i = Item.getItemById(searchFor_ID);
+    if(i != null){
+      setInventorySlotContents(0, new ItemStack(i,1));
+    }
   }
 
   public void setExplosionThreshold(int x) {
@@ -82,13 +105,28 @@ public class TileEntityBaseScanner extends TileEntity implements IInventory{
     return itemstack;
   }
 
+  
   public ItemStack getStackInSlotOnClosing(int slot) {
     ItemStack itemstack = getStackInSlot(slot);
     setInventorySlotContents(slot, null);
     return itemstack;
   }
+  
+  public Block getStoredBlock(){
+    return null;
+  }
 
+  /*
+   * Called every time something changes w/in the inventory?
+   * @see net.minecraft.inventory.IInventory#setInventorySlotContents(int, net.minecraft.item.ItemStack)
+   */
   public void setInventorySlotContents(int slot, ItemStack itemstack) {
+    if(slot == 0 && itemstack != null){
+      Block b = Block.getBlockFromItem(itemstack.getItem());
+      if (b != null){
+        this.searchFor_ID = Block.getIdFromBlock(b);
+      }
+    }
     inventory[slot] = itemstack;
 
     if (itemstack != null && itemstack.stackSize > getInventoryStackLimit()) {
@@ -114,11 +152,11 @@ public class TileEntityBaseScanner extends TileEntity implements IInventory{
   }
 
   public void openInventory() {
-    // TODO Auto-generated method stub
+    // 
   }
 
   public void closeInventory() {
-    // TODO Auto-generated method stub
+    // 
   }
 
   public boolean isItemValidForSlot(int var1, ItemStack var2) {

@@ -1,14 +1,17 @@
 package com.otter_in_a_suit.MC.ChunkAnalyzerMod.Blocks;
 
 /**
- * TODO: CFG TODO: Chunk analyzer
+ * TODO: Chunk analyzer
  */
 import java.util.ArrayList;
 import java.util.Random;
 
+import org.lwjgl.input.Keyboard;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -59,44 +62,46 @@ public abstract class BaseScanner extends BlockContainer implements IScanner {
    * net.minecraft.entity.player.EntityPlayer, int, float, float, float)
    */
   @Override
-  public boolean onBlockActivated(World p_149727_1_, int p_149727_2_, int p_149727_3_,
-      int p_149727_4_, EntityPlayer p_149727_5_, int p_149727_6_, float p_149727_7_,
-      float p_149727_8_, float p_149727_9_) {
-    if (p_149727_1_.isRemote)
+  public boolean onBlockActivated(World world, int p_149727_2_, int p_149727_3_, int p_149727_4_,
+      EntityPlayer player, int p_149727_6_, float p_149727_7_, float p_149727_8_, float p_149727_9_) {
+    if (world.isRemote)
       return false;
     int x = p_149727_2_;
     int y = p_149727_3_;
     int z = p_149727_4_;
 
-    // TODO: TEST
-     FMLNetworkHandler.openGui(p_149727_5_, ChunkAnalyzerMod._instance, 0, p_149727_1_, x, y, z);
-    if(true) return true;
-    
+    if (Keyboard.isKeyDown(Keyboard.KEY_RSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+      FMLNetworkHandler.openGui(player, ChunkAnalyzerMod._instance, 0, world, x, y, z);
+      return true;
+    }
+
     // Set searchFor-block
     Block searchFor = Blocks.iron_ore;
     try {
       TileEntityBaseScanner tile =
-          TileEntityHelper.getTileEntityBaseScannerFromCoords(p_149727_1_, x, y, z);
+          TileEntityHelper.getTileEntityBaseScannerFromCoords(world, x, y, z);
       if (tile != null) {
-        ItemStack itemInUse = p_149727_5_.getHeldItem();
-        // store the current item
-        if (itemInUse != null && itemInUse.stackSize > 0) {
-          searchFor = Block.getBlockFromItem(itemInUse.getItem());
-          tile.searchFor_ID = Block.getIdFromBlock(searchFor);
-        } else {
-          // if no item held in hand or no block, use stored tile
-          searchFor = Block.getBlockById(tile.searchFor_ID);
-        }
+        /*
+         * ItemStack itemInUse = player.getHeldItem(); // store the current item if (itemInUse !=
+         * null && itemInUse.stackSize > 0) { searchFor =
+         * Block.getBlockFromItem(itemInUse.getItem()); tile.searchFor_ID =
+         * Block.getIdFromBlock(searchFor); } else {
+         */
+        // if no item held in hand or no block, use stored tile
+        searchFor = Block.getBlockById(tile.searchFor_ID);
+        // }
         System.out.println("Stored " + Block.getBlockById(tile.searchFor_ID));
-        if (searchFor == null)
-          throw new Exception(""); // yeah...
+        if (searchFor == null || searchFor == Blocks.air) {
+          WorldHelper.chat("Couldn't read or store a (stored) block!");
+          return false;
+        }
         System.out.println("Search for: " + searchFor);
       }
     } catch (Exception e) {
-      WorldHelper.chat("Couldn't read or store a (stored) block, l/f diamond-ore instead!");
+      e.printStackTrace();
     }
 
-    search(p_149727_1_, p_149727_5_, x, y, z, searchFor, this, true, false);
+    search(world, player, x, y, z, searchFor, this, true, false);
 
     return false;
   }
@@ -114,7 +119,7 @@ public abstract class BaseScanner extends BlockContainer implements IScanner {
 
   /**
    * 
-   * @param p_149727_1_
+   * @param world
    * @param player
    * @param x
    * @param y
@@ -125,7 +130,7 @@ public abstract class BaseScanner extends BlockContainer implements IScanner {
    * @param resetOnly: use resetChunkFromMarkers()
    * @return
    */
-  protected ArrayList<Vertex> search(World p_149727_1_, EntityPlayer player, int x, int y, int z,
+  protected ArrayList<Vertex> search(World world, EntityPlayer player, int x, int y, int z,
       Block searchFor, BaseScanner caller, boolean placeMarkers, boolean resetOnly) {
     boolean debugPlacer = false;
     if (searchFor == null || caller instanceof ChunkAnalyzer)
@@ -140,7 +145,7 @@ public abstract class BaseScanner extends BlockContainer implements IScanner {
       c++;
       x_mod = (x1_border) % 16;
       if (debugPlacer)
-        p_149727_1_.setBlock(x1_border, y, z, new MarkerTorch());
+        world.setBlock(x1_border, y, z, new MarkerTorch());
     }
 
     int z_mod = z % 16;
@@ -151,33 +156,33 @@ public abstract class BaseScanner extends BlockContainer implements IScanner {
       c++;
       z_mod = (z1_border) % 16;
       if (debugPlacer)
-        p_149727_1_.setBlock(x1_border, y, z1_border, new MarkerTorch());
+        world.setBlock(x1_border, y, z1_border, new MarkerTorch());
     }
 
     int z2_border = z1_border - 16;
     int x2_border = x1_border - 16;
     if (debugPlacer) {
-      p_149727_1_.setBlock(x1_border, y, z2_border, Blocks.redstone_block);
-      p_149727_1_.setBlock(x2_border, y, z1_border, Blocks.redstone_block);
-      p_149727_1_.setBlock(x2_border, y, z2_border, Blocks.redstone_block);
-      p_149727_1_.setBlock(x1_border, y, z1_border, Blocks.redstone_block);
+      world.setBlock(x1_border, y, z2_border, Blocks.redstone_block);
+      world.setBlock(x2_border, y, z1_border, Blocks.redstone_block);
+      world.setBlock(x2_border, y, z2_border, Blocks.redstone_block);
+      world.setBlock(x1_border, y, z1_border, Blocks.redstone_block);
     }
-    //long size = 0;
+    // long size = 0;
     int count = 0;
     int accountableCount = 0;
     boolean kBlocked = true;
     ArrayList<Vertex> findings = new ArrayList<Vertex>();
     ArrayList<Vertex> torchPositions = new ArrayList<Vertex>();
-    Chunk chunk = p_149727_1_.getChunkFromBlockCoords(x, z);
+    Chunk chunk = world.getChunkFromBlockCoords(x, z);
     int chunkX = chunk.xPosition * 16;
     int chunkZ = chunk.zPosition * 16;
     for (int i = 0; i < 16; ++i) {
       for (int j = 0; j < 16; ++j) {
         kBlocked = false;
         for (int k = 0; k < 256; ++k) {
-          Block block = p_149727_1_.getBlock(chunkX + i, k, chunkZ + j);
+          Block block = world.getBlock(chunkX + i, k, chunkZ + j);
           if (block != Blocks.air) {
-            //++size;
+            // ++size;
           }
           if (block == ChunkAnalyzerMod.markerTorch) {
             torchPositions.add(new Vertex((chunkX + i), k, (chunkZ + j), block));
@@ -215,14 +220,14 @@ public abstract class BaseScanner extends BlockContainer implements IScanner {
     sufficientLevels = (player.capabilities.isCreativeMode) ? true : sufficientLevels;
     // Delete markers
     System.out.println("Torches: " + torchPositions.size() + " w " + resetOnly);
-    if (resetOnly || (ChunkAnalyzerMod.useXPForScanner && !sufficientLevels)) {
+    if (resetOnly || placeMarkers || (ChunkAnalyzerMod.useXPForScanner && !sufficientLevels)) {
       for (Vertex v : torchPositions) {
-        p_149727_1_.setBlockToAir(v.x, v.y, v.z);
+        world.setBlockToAir(v.x, v.y, v.z);
       }
     }
 
     if (placeMarkers && sufficientLevels)
-      renderMarkerAndSendMSG(findings, p_149727_1_, player, x, y, z, searchFor, caller, count,
+      renderMarkerAndSendMSG(findings, world, player, x, y, z, searchFor, caller, count,
           accountableCount);
 
     return findings;
@@ -251,13 +256,13 @@ public abstract class BaseScanner extends BlockContainer implements IScanner {
       if (caller.getLevel() == LEVEL_BASE) {
         // do nuthin b/c abstract. if this happens, bad news
       } else if (caller.getLevel() == LEVEL_WOOD) {
-        msg = "Found at least one " + searchFor.getUnlocalizedName() + "!";
+        msg = "Found at least one " + searchFor.getUnlocalizedName().substring(5) + "!";
         renderOne = true;
       }
       // Gold & iron are essential equal right now, to be changed in the
       // future
       else if (caller.getLevel() == LEVEL_IRON || caller.getLevel() == LEVEL_GOLD) {
-        msg = "Found " + count + " " + searchFor.getUnlocalizedName() + "!";
+        msg = "Found " + count + " " + searchFor.getUnlocalizedName().substring(5) + "!";
         renderTorches = true;
       }
 
@@ -279,8 +284,6 @@ public abstract class BaseScanner extends BlockContainer implements IScanner {
             p_149727_1_.spawnEntityInWorld(new EntityItem(p_149727_1_, x, y, z, new ItemStack(
                 p_149727_1_.getBlock(v.x, ySky, v.z))));
             p_149727_1_.setBlock(v.x, ySky, v.z, ChunkAnalyzerMod.markerTorch);
-            System.out.println("Torch at " + v.x + ", " + ySky + ", " + v.z);
-
             if (!player.capabilities.isCreativeMode && playerNeedsTorches)
               player.inventory.consumeInventoryItem(marker);
           }
@@ -342,13 +345,23 @@ public abstract class BaseScanner extends BlockContainer implements IScanner {
     getAndSaveExplosionThreshold(world, x, y, z);
     int isExplode = _randomizer.calculateExplosionLevel(explosion_threshold);
 
-    if (isExplode == Randomizer.LEVEL_EXPL_DES) {
-      triggerExplosion(world, x, y, z);
-    } else if (isExplode == Randomizer.LEVEL_EXPL_PRES) {
-      this.dropBlockAsItem(world, x, y, z);
-    } else {
-      System.out.println("no boom =(");
-      this.dropBlockAsItem(world, x, y, z);
+    try {
+      TileEntityBaseScanner tile =
+          TileEntityHelper.getTileEntityBaseScannerFromCoords(world, x, y, z);
+      ItemStack storedBlockAsItem = tile.getStackInSlotOnClosing(0);
+      
+      if (isExplode == Randomizer.LEVEL_EXPL_DES) {
+        triggerExplosion(world, x, y, z);
+      } else if (isExplode == Randomizer.LEVEL_EXPL_PRES || isExplode == Randomizer.LEVEL_PRESERVE) {
+        System.out.println("no boom =(");
+        this.dropBlockAsItem(world, x, y, z);
+        if(storedBlockAsItem != null){
+          Entity item = new EntityItem(world, x, y, z, storedBlockAsItem);
+          world.spawnEntityInWorld(item);
+        }
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
     }
     resetChunkFromMarkers(world, player, x, y, z);
     return world.setBlockToAir(x, y, z);
@@ -375,18 +388,20 @@ public abstract class BaseScanner extends BlockContainer implements IScanner {
       TileEntityBaseScanner tile =
           TileEntityHelper.getTileEntityBaseScannerFromCoords(p_149642_1_, p_149642_2_,
               p_149642_3_, p_149642_4_);
-      String display =
-          "Explosion-threshold: " + tile.getNBTTagCompound().getInteger("explosionThreshold");
+      String display = "";
+      System.out.println(tile.getNBTTagCompound().getInteger("explosionThreshold")); // TODO: check
+      if (tile.getNBTTagCompound().getInteger("explosionThreshold") != Randomizer.EXPLOSION_THRESHOLD_BASE)
+        display += "Reenforced ";
+      display += "Scanner";
       display +=
-          "/ Searching for: "
-              + Block.getBlockById(tile.getNBTTagCompound().getInteger("searchFor_ID"));
+          ", Target: "
+              + Block.getBlockById(tile.getNBTTagCompound().getInteger("searchFor_ID"))
+                  .getUnlocalizedName().substring(5);
+
       WorldHelper.dropBlockAsItemWithTileEntity(p_149642_1_, p_149642_2_, p_149642_3_, p_149642_4_,
           this, display);
     } catch (Exception e) {
       e.printStackTrace();
-
-      // WorldHelper.dropBlockAsItemWithTileEntity(p_149642_1_, p_149642_2_, p_149642_3_,
-      // p_149642_4_, p_149642_5_.getItem());
     }
   }
 
