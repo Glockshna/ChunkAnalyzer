@@ -9,6 +9,9 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 
+ /**
+  * http://www.minecraftforum.net/topic/1931778-162-advanced-minecraft-forge-modding-tutorial-1-interfaces-part-3/
+  */
 public class GUIScanner extends GuiContainer {
   public static final ResourceLocation texture = new ResourceLocation(
       ChunkAnalyzerMod.MODID.toLowerCase(), "textures/gui/deployer.png");

@@ -250,7 +250,7 @@ public abstract class BaseScanner extends BlockContainer implements IScanner {
     if (!findings.isEmpty()) {
       if (caller.getLevel() == LEVEL_BASE) {
         // do nuthin b/c abstract. if this happens, bad news
-      } else if (caller.getLevel() == LEVEL_STONE) {
+      } else if (caller.getLevel() == LEVEL_WOOD) {
         msg = "Found at least one " + searchFor.getUnlocalizedName() + "!";
         renderOne = true;
       }

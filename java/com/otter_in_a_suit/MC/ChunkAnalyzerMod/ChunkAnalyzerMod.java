@@ -8,7 +8,7 @@ import net.minecraftforge.common.config.Configuration;
 import com.otter_in_a_suit.MC.ChunkAnalyzerMod.Blocks.GoldScanner;
 import com.otter_in_a_suit.MC.ChunkAnalyzerMod.Blocks.IronScanner;
 import com.otter_in_a_suit.MC.ChunkAnalyzerMod.Blocks.MarkerTorch;
-import com.otter_in_a_suit.MC.ChunkAnalyzerMod.Blocks.StoneScanner;
+import com.otter_in_a_suit.MC.ChunkAnalyzerMod.Blocks.WoodenScanner;
 import com.otter_in_a_suit.MC.ChunkAnalyzerMod.Blocks.GUI.GUIHandler;
 import com.otter_in_a_suit.MC.ChunkAnalyzerMod.Items.IronCage;
 
@@ -25,7 +25,7 @@ public class ChunkAnalyzerMod {
   public static final String MODID = "chunkanalyzermod";
   public static final String VERSION = "0.3b";
 
-  public static StoneScanner stoneScanner;
+  public static WoodenScanner woodenScanner;
   public static IronScanner ironScanner;
   public static GoldScanner goldScanner;
   public static MarkerTorch markerTorch;
@@ -64,12 +64,12 @@ public class ChunkAnalyzerMod {
   }
 
   private void registerBlocks() {
-    stoneScanner = new StoneScanner();
+    woodenScanner = new WoodenScanner();
     ironScanner = new IronScanner();
     goldScanner = new GoldScanner();
     markerTorch = new MarkerTorch();
 
-    GameRegistry.registerBlock(stoneScanner, stoneScanner.getUnlocalizedName().substring(5));
+    GameRegistry.registerBlock(woodenScanner, woodenScanner.getUnlocalizedName().substring(5));
     GameRegistry.registerBlock(ironScanner, ironScanner.getUnlocalizedName().substring(5));
     GameRegistry.registerBlock(goldScanner, goldScanner.getUnlocalizedName().substring(5));
     GameRegistry.registerBlock(markerTorch, markerTorch.getUnlocalizedName().substring(5));
@@ -89,7 +89,7 @@ public class ChunkAnalyzerMod {
   }
 
   private void registerRecepies() {
-    GameRegistry.addRecipe(new ItemStack(stoneScanner), "SIS", "IRI", "SIS",
+    GameRegistry.addRecipe(new ItemStack(woodenScanner), "SIS", "IRI", "SIS",
         //
         'S', new ItemStack(Blocks.stone_slab), 'I', new ItemStack(Items.iron_pickaxe), 'R',
         new ItemStack(Items.redstone));
@@ -97,7 +97,7 @@ public class ChunkAnalyzerMod {
     GameRegistry.addRecipe(new ItemStack(ironScanner), "SIS", "IRI", "SIS",
         //
         'S', new ItemStack(Blocks.iron_bars), 'I', new ItemStack(Items.iron_pickaxe), 'R',
-        new ItemStack(stoneScanner));
+        new ItemStack(woodenScanner));
 
     GameRegistry.addRecipe(new ItemStack(goldScanner), "SIS", "IRI", "SIS",
         //
