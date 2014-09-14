@@ -45,4 +45,4 @@ Here @ GitHub or via MC-forums
 
 Forums
 -----------
-[Forums-post](http://www.minecraftforum.net/)
+[Forums-post](http://bit.ly/1nlBEz3)
