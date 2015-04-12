@@ -1,48 +1,37 @@
-Chunk Analyzer Mod Minecraft 1.7.2
+Chunk Analyzer Beta 1.0 Mod Minecraft 1.7.10
 =======
+Note: This is a fork off of Otter In A Suit's original Chunk Analyzer mod. If you are looking for the original project you can find it here: https://github.com/otter-in-a-suit/ChunkAnalyzer 
+This version is drastically different from the original project and will continue to diverge.
 
 Content
 -----------
-Minecraft-mod for analyzing chunks, finding certain blocks w/o being to OP.
-Heavily WIP.
-Also, this is my first MC-mod in, like, ever! Yay!
+This mod adds a machine that allows you to analyze the ore make up of a limited area. 
+This mod is intended to be used with mods that modify the ore generation to be more realistic and localized rather than evenly distributed and as is won't really be that useful with vanilla-like ore generation.
 
 Items & Recepies
 -----------
-* Wooden Scanner
-Analyzes the chunk & places a marker, but will only return a single location & use most XP
 
-* Iron Scanner
-Analyzes the chunk & places a marker, will return all locations & uses XP
-
-* Gold Scanner
-Analyzes the chunk & places a marker, will return all locations & uses NO XP
-
-* Iron cage
-Decreases the explosion-chance drastically. Using 2 iron cages will effectively eliminate the chance of your scanner exploding!
-
-* Chunk analyzer
-WIP, not implemented yet
-Will be used to analyze the entire chunk
-
-* Terminal-PC
-Not implemented yet (as in: no code)
-Will be used to control multiple scanners & analyzers in different locations
-Also may be the place where the chunk analyzer sends its data to
+Scanner - Scans the chunk it's placed in for ore placed in its inventory.
 
 Config
 -----------
-useXPForScanner = true|false
+useXPForScanner = true|false 
 
 Disclaimer
 -----------
-This is an unfinished version I simply push every time I've worked on something. May or may not work properly. Absolutely no version-control or and branch-logic whatsoever.
-But you can have a gander at the code if you like to, provide feedback and stuff. Also, free src-backup for me.
+This mod is VERY much a work in progress, hence why there are no builds for this fork as of yet. If you would like to help out contact me here or on the MCF (Check the contact section)
+
+
+Credits:
+-----------
+Otter-In-A-Suit: Original mod
+Glockshna: Updating to 1.7.10 and new code
 
 Contact
 -----------
-Here @ GitHub or via MC-forums
+Here @ GitHub or by messaging Glocksna (Yes spelled that way, I typoed when I made my forum account)
 
 Forums
 -----------
-[Forums-post](http://bit.ly/1nlBEz3)
+No post for this fork exists yet the original forum post can be found here:
+[Original Chunk Analyzer Mod post by Otter-In-A-Suit](http://bit.ly/1nlBEz3)
