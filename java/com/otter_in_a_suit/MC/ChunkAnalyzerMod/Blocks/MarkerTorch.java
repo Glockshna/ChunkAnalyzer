@@ -61,7 +61,7 @@ public class MarkerTorch extends Block {
    */
   @Override
   public AxisAlignedBB getCollisionBoundingBoxFromPool(World par1World, int par2, int par3, int par4) {
-    return AxisAlignedBB.getAABBPool().getAABB(0, 0, 0, 0, 0, 0);
+    return AxisAlignedBB.getBoundingBox(0, 0, 0, 0, 0, 0);
   }
 
   /*
