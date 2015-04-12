@@ -21,7 +21,6 @@ import net.minecraftforge.common.config.Configuration;
 
 import com.otter_in_a_suit.MC.ChunkAnalyzerMod.Blocks.GoldScanner;
 import com.otter_in_a_suit.MC.ChunkAnalyzerMod.Blocks.IronScanner;
-import com.otter_in_a_suit.MC.ChunkAnalyzerMod.Blocks.MarkerTorch;
 import com.otter_in_a_suit.MC.ChunkAnalyzerMod.Blocks.WoodenScanner;
 import com.otter_in_a_suit.MC.ChunkAnalyzerMod.Blocks.GUI.GUIHandler;
 import com.otter_in_a_suit.MC.ChunkAnalyzerMod.Items.IronCage;
@@ -40,12 +39,30 @@ import cpw.mods.fml.common.registry.GameRegistry;
  */
 
 /* Global ToDo:
- * TODO: Chunk analyzer 
- * TODO: getGroundLevelYAxsis_i 
- * TODO: clean up the code, properly implement helper, maybe create an own helper-jar...
- * -> https://image-store.slidesharecdn.com/8237aa56-e138-11e3-8a7e-22000ab82dd9-large.jpeg 
- * TODO: Remote Terminal 
- * TODO: mobile scanner
+ *  TODO: Comment code for readability (In progress)
+ *  TODO: Remove marker torches completely (Done)
+ *  TODO: Remove explosion chance (Done)
+ *  TODO: Make item placed in scanner a ghost item instead of a physical item
+ *  TODO: Remove tiers (In progress)
+ *  TODO: Stop requiring shift to enter the interface
+ *  TODO: Change activation to require Redstone signal instead of right click (Power also??)
+ *  TODO: Change ore scanning and interface to and scan for all ores in the OreDict
+ *  TODO: Change report to be more vague Eg:
+ *  
+ *  Prospecting Report:
+ *  The device seems to register a < very dense | dense | minor | trace > deposit of <the most abundant material type> in the scanning area.
+ *  
+ *  TODO: Add noise to the readings (Inaccuracy) 
+ *  TODO: Add upgrades that allow for specific ore type scanning(?)
+ *  
+ *  Down the road stuff:
+ *  
+ *  1. Make the machines appear to use some sort of seismic scanning method by having some sort of shock wave emanate from the machine on the ground EG: http://bit.ly/1ynsS9S
+ *  2. Cooler looking model
+ *  
+ *  BUGS:
+ *  1. Shift clicking a stack into the interface eats all but one of the stack (Fixed, increased stack limit to 64 as a band aid)
+ *  
  */
 @Mod(modid = ChunkAnalyzerMod.MODID, version = ChunkAnalyzerMod.VERSION)
 public class ChunkAnalyzerMod {
@@ -57,9 +74,9 @@ public class ChunkAnalyzerMod {
   public static WoodenScanner woodenScanner;
   public static IronScanner ironScanner;
   public static GoldScanner goldScanner;
-  public static MarkerTorch markerTorch;
   public static IronCage ironCage;
 
+  public static boolean scannerDebug = false;
   public static boolean useXPForScanner;
   public static Configuration cfg;
 
@@ -72,6 +89,7 @@ public class ChunkAnalyzerMod {
     cfg.load();
     useXPForScanner =
         cfg.get(Configuration.CATEGORY_GENERAL, "useXPForScanner", true).getBoolean(true);
+    
     cfg.save();
   }
 
@@ -95,12 +113,11 @@ public class ChunkAnalyzerMod {
     woodenScanner = new WoodenScanner();
     ironScanner = new IronScanner();
     goldScanner = new GoldScanner();
-    markerTorch = new MarkerTorch();
+
 
     GameRegistry.registerBlock(woodenScanner, woodenScanner.getUnlocalizedName().substring(5));
     GameRegistry.registerBlock(ironScanner, ironScanner.getUnlocalizedName().substring(5));
     GameRegistry.registerBlock(goldScanner, goldScanner.getUnlocalizedName().substring(5));
-    GameRegistry.registerBlock(markerTorch, markerTorch.getUnlocalizedName().substring(5));
   }
 
   private void registerItems() {

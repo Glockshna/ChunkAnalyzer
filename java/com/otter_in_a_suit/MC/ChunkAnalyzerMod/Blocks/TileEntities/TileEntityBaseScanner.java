@@ -153,7 +153,7 @@ public class TileEntityBaseScanner extends TileEntity implements IInventory {
   }
 
   public int getInventoryStackLimit() {
-    return 1;
+    return 64;
   }
 
   public boolean isUseableByPlayer(EntityPlayer player) {
