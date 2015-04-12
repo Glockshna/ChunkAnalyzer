@@ -17,7 +17,7 @@ import com.otter_in_a_suit.MC.ChunkAnalyzerMod.Helper.TileEntityHelper;
 public class IronCage extends Item {
   public IronCage() {
     this.setCreativeTab(CreativeInv._instance);
-    this.setUnlocalizedName("Iron Cage");
+    this.setUnlocalizedName("IronCage");
     this.setTextureName("chunkanalyzermod:IronCage");
   }
 

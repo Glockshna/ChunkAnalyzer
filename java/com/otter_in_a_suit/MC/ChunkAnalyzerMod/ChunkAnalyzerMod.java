@@ -32,20 +32,23 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
 /**
  * Chunk Analyzer Mod by 
- * @author otter-in-a-suit
- * @see https://www.otter-in-a-suit.com
- * Current version as of 2014-05-23
- * For Minecraft 1.7.2
+ * @author otter-in-a-suit, Glockshna
+ * Current version as of 2015-04-12
+ * For Minecraft 1.7.10
  */
+/* Build Checklist
+ * 1. Did you turn all debugging off? 
+ * 2. Does it work?
+ * 3. Did you update build.gradle? 
+ */
+
 
 /* Global ToDo:
  *  TODO: Comment code for readability (In progress)
- *  TODO: Remove marker torches completely (Done)
- *  TODO: Remove explosion chance (Done)
- *  TODO: Make item placed in scanner a ghost item instead of a physical item
  *  TODO: Remove tiers (In progress)
+ *  TODO: Make item placed in scanner a ghost item instead of a physical item
  *  TODO: Stop requiring shift to enter the interface
- *  TODO: Change activation to require Redstone signal instead of right click (Power also??)
+ *  TODO: Change activation to require Redstone pulse instead of right click (Power also??)
  *  TODO: Change ore scanning and interface to and scan for all ores in the OreDict
  *  TODO: Change report to be more vague Eg:
  *  
@@ -62,21 +65,24 @@ import cpw.mods.fml.common.registry.GameRegistry;
  *  
  *  BUGS:
  *  1. Shift clicking a stack into the interface eats all but one of the stack (Fixed, increased stack limit to 64 as a band aid)
- *  
+ *  2. Localized names are not showing. (Fixed)
  */
 @Mod(modid = ChunkAnalyzerMod.MODID, version = ChunkAnalyzerMod.VERSION)
 public class ChunkAnalyzerMod {
   public static ChunkAnalyzerMod _instance;
 
   public static final String MODID = "chunkanalyzermod";
-  public static final String VERSION = "0.5b";
-
+  public static final String VERSION = "0.71";
+  
+  //Debug//
+  public static boolean scannerDebug = false;
+  //Debug//
+  
   public static WoodenScanner woodenScanner;
   public static IronScanner ironScanner;
   public static GoldScanner goldScanner;
   public static IronCage ironCage;
 
-  public static boolean scannerDebug = false;
   public static boolean useXPForScanner;
   public static Configuration cfg;
 

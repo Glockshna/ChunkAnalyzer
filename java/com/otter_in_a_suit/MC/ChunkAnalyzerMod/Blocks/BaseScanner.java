@@ -137,6 +137,7 @@ public abstract class BaseScanner extends BlockContainer implements IScanner {
 		//Figure out chunk boundries//
 		if(debug)
 			System.out.println("click from " + caller);
+		
 		int x_mod = x % 16;
 		int x1_border = x;
 		int c = 0;
@@ -155,6 +156,7 @@ public abstract class BaseScanner extends BlockContainer implements IScanner {
 		}
 		int z2_border = z1_border - 16;
 		int x2_border = x1_border - 16;
+		
 		if (debug) {
 			world.setBlock(x1_border, y, z2_border, Blocks.redstone_block);
 			world.setBlock(x2_border, y, z1_border, Blocks.redstone_block);
@@ -229,9 +231,10 @@ public abstract class BaseScanner extends BlockContainer implements IScanner {
 		String msg2 = "";
 		
 		//Check that there are in fact some ores that match the scan type//
-		if(debug)
+		if(debug){
 			System.out.println("Count = " + count);
 			System.out.println("Looking for " + searchFor.getLocalizedName());
+		}
 		if (count > 0) {
 			
 			//Determine what density to report//
@@ -239,18 +242,18 @@ public abstract class BaseScanner extends BlockContainer implements IScanner {
 			
 			if (count >= veryDense) {
 				msg1 = "Prospecting Report:";
-				msg2 = "There appears to be a very dense concentration of " + searchFor.getLocalizedName().substring(5) + ".";
+				msg2 = "There appears to be a very dense concentration of " + searchFor.getLocalizedName() + ".";
 				
 			} else if (count >= dense) {
 				msg1 = "Prospecting Report:";
-				msg2 = "There appears to be a dense concentration of " + searchFor.getLocalizedName().substring(5) + ".";
+				msg2 = "There appears to be a dense concentration of " + searchFor.getLocalizedName() + ".";
 			} else if (count >= minor){
 				msg1 = "Prospecting Report:";
 				msg2 = "There appears to be a minor concentration of " + searchFor.getLocalizedName() + ".";
 				
 			} else if (count >= trace) {
 				msg1 = "Prospecting Report:";
-				msg2 = "There appears to be trace amounts of " + searchFor.getLocalizedName() + ".";
+				msg2 = "There appear to be trace amounts of " + searchFor.getLocalizedName() + ".";
 			} else if (count < trace) {
 				msg1 = "Prospecting Report:";
 				msg2 = "There doesn't appear to be enough " + searchFor.getLocalizedName() + " to bother with";

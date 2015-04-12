@@ -5,7 +5,7 @@ import net.minecraft.world.World;
 
 public class GoldScanner extends BaseScanner implements IScanner {
   public GoldScanner() {
-    this.setBlockName("Gold Scanner");
+    this.setBlockName("GoldScanner");
     this.setBlockTextureName("chunkanalyzermod:GoldScanner");
   }
 
