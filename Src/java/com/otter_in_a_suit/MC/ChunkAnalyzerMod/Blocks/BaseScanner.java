@@ -36,7 +36,7 @@ public abstract class BaseScanner extends BlockContainer implements IScanner {
 	/*************************
 	 * VARIABLES & CONSTRUCTORS
 	 ************************/
-	private boolean debug = ChunkAnalyzerMod.scannerDebug;
+	private boolean debug = ChunkAnalyzerMod.scannerBaseDebug;
 	protected int quantityDropped = 0;
 	private int explosion_threshold = 50;
 	private static Randomizer _randomizer = new Randomizer();
@@ -94,7 +94,8 @@ public abstract class BaseScanner extends BlockContainer implements IScanner {
 							.chat("Couldn't read or store a (stored) block!");
 					return false;
 				}
-				System.out.println("Search for: " + searchFor);
+				if(debug)
+					System.out.println("Search for: " + searchFor);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -222,12 +223,7 @@ public abstract class BaseScanner extends BlockContainer implements IScanner {
 		// future
 		// (2014-05-19)
 		
-		int veryDense = 200;
-		int dense = 150;
-		int minor = 100;
-		int trace = 50;
-		
-		String msg1 = "";
+		String msg1 = "Prospecting Report";
 		String msg2 = "";
 		
 		//Check that there are in fact some ores that match the scan type//
@@ -237,30 +233,29 @@ public abstract class BaseScanner extends BlockContainer implements IScanner {
 		}
 		if (count > 0) {
 			
-			//Determine what density to report//
-			// TODO: Make these numbers configurable//
-			
-			if (count >= veryDense) {
-				msg1 = "Prospecting Report:";
-				msg2 = "There appears to be a very dense concentration of " + searchFor.getLocalizedName() + ".";
+
+			if(!ChunkAnalyzerMod.reportRaw){
 				
-			} else if (count >= dense) {
-				msg1 = "Prospecting Report:";
-				msg2 = "There appears to be a dense concentration of " + searchFor.getLocalizedName() + ".";
-			} else if (count >= minor){
-				msg1 = "Prospecting Report:";
-				msg2 = "There appears to be a minor concentration of " + searchFor.getLocalizedName() + ".";
-				
-			} else if (count >= trace) {
-				msg1 = "Prospecting Report:";
-				msg2 = "There appear to be trace amounts of " + searchFor.getLocalizedName() + ".";
-			} else if (count < trace) {
-				msg1 = "Prospecting Report:";
-				msg2 = "There doesn't appear to be enough " + searchFor.getLocalizedName() + " to bother with";
-			} 
+				//Determine what density to report//
+				if (count >= ChunkAnalyzerMod.veryDense) {
+					msg2 = "There appears to be a very dense concentration of " + searchFor.getLocalizedName() + ".";
+					
+				} else if (count >= ChunkAnalyzerMod.dense) {
+					msg2 = "There appears to be a dense concentration of " + searchFor.getLocalizedName() + ".";
+				} else if (count >= ChunkAnalyzerMod.minor){
+					msg2 = "There appears to be a minor concentration of " + searchFor.getLocalizedName() + ".";
+					
+				} else if (count >= ChunkAnalyzerMod.trace) {
+					msg2 = "There appear to be trace amounts of " + searchFor.getLocalizedName() + ".";
+				} else if (count < ChunkAnalyzerMod.trace) {
+					msg2 = "There doesn't appear to be enough " + searchFor.getLocalizedName() + " to bother with.";
+				} 
+			} else {
+				msg2 = "Detected " + count + " " + searchFor.getLocalizedName() + ".";
+			}
+
 		}
 		else {
-			msg1 = "Prospecting Report:";
 			msg2 = "There wasn't enough " + searchFor.getLocalizedName() + " for the scanner to report anything.";
 		}
 		//Report it//

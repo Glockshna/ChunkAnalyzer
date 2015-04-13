@@ -37,7 +37,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
  * For Minecraft 1.7.10
  */
 /* Build Checklist
- * 1. Did you turn all debugging off? 
+ * 1. Did you turn all debugging off? (Should be handled by config now)
  * 2. Does it work?
  * 3. Did you update build.gradle? 
  */
@@ -72,10 +72,11 @@ public class ChunkAnalyzerMod {
   public static ChunkAnalyzerMod _instance;
 
   public static final String MODID = "chunkanalyzermod";
-  public static final String VERSION = "0.71";
+  public static final String VERSION = "0.72";
   
   //Debug//
-  public static boolean scannerDebug = false;
+  public static boolean scannerDebug;
+  public static boolean scannerBaseDebug;
   //Debug//
   
   public static WoodenScanner woodenScanner;
@@ -84,6 +85,11 @@ public class ChunkAnalyzerMod {
   public static IronCage ironCage;
 
   public static boolean useXPForScanner;
+  public static int veryDense;
+  public static int dense;
+  public static int minor;
+  public static int trace;
+  public static boolean reportRaw;
   public static Configuration cfg;
 
   public static GUIHandler GUIHandler;
@@ -91,12 +97,8 @@ public class ChunkAnalyzerMod {
   @EventHandler
   public void preInit(FMLPreInitializationEvent event) {
     _instance = this;
-    cfg = new Configuration(event.getSuggestedConfigurationFile());
-    cfg.load();
-    useXPForScanner =
-        cfg.get(Configuration.CATEGORY_GENERAL, "useXPForScanner", true).getBoolean(true);
-    
-    cfg.save();
+    initConfig(event);
+
   }
 
   @EventHandler
@@ -115,6 +117,27 @@ public class ChunkAnalyzerMod {
     // TileEntityMarkerRenderer());
   }
 
+  private void initConfig(FMLPreInitializationEvent event){
+	  
+	    cfg = new Configuration(event.getSuggestedConfigurationFile());
+	    cfg.load();
+	    
+	    //Reporting Config//
+	    reportRaw = cfg.get("Reporting", "1-reportRaw", false, "Report the raw amount of ore detected in the chunk instead of vague readings").getBoolean(true);
+	    veryDense = cfg.get("Reporting", "2-veryDenseThreshold", 90, "At this amount of ore in the scan area it is reported as Very Dense. Only useful if reportRaw is set to false.").getInt();
+	    dense = cfg.get("Reporting", "3-denseThreshold", 80).getInt();
+	    minor = cfg.get("Reporting", "4-minorTheshold", 70).getInt();
+	    trace = cfg.get("Reporting", "5-traceThreshold", 60).getInt();
+	    
+	    //General Config//
+	    useXPForScanner = cfg.get(Configuration.CATEGORY_GENERAL, "useXPForScanner", true,"Use experience to scan for ore?").getBoolean(true);
+	    
+	    //Debugging//
+	    scannerDebug = cfg.get("Debug", "_debugScanner", false, "Debugging").getBoolean(true);
+	    scannerBaseDebug = cfg.get("Debug", "debugBaseScanner", false).getBoolean(true);
+	    
+	    cfg.save();
+  }
   private void registerBlocks() {
     woodenScanner = new WoodenScanner();
     ironScanner = new IronScanner();
